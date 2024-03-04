@@ -32,12 +32,13 @@ app.use(cors());
 
 
 const COLLECTIONS = {
-    washrooms: "washrooms"
+    washrooms: "washrooms",
+    users: "users"
   };
 
 app.get("/getAllWashrooms", express.json(), async (req, res) => {
     try {
-        const collection = db.collection(COLLECTIONS.washrooms);
+        const collection = db.collection(COLLECTIONS.users);
         const data = await collection.find().toArray();
         res.json({ response: data });
       } catch (error) {
@@ -118,4 +119,81 @@ app.patch("/patchWashroom/:washroomId", express.json(), async (req, res) => {
   } catch (error) {
     res.status(500).json({error: error.message})
   }
-})
+});
+
+app.get("/getUser/:userId", express.json(), async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    if (!ObjectId.isValid(userId)) {
+      return res.status(400).json({ error: "Invalid user ID." });
+    }
+
+    const collection = db.collection(COLLECTIONS.users);
+    const data = await collection.findOne(new ObjectId(userId));
+    res.json({ response: data });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/postUser", express.json(), async (req, res) => {
+  try {
+    const { firstName, lastName, healthCondition } = req.body;
+
+    if (!firstName && !lastName && !healthCondition) {
+      return res
+        .status(400)
+        .json({ error: "At least one of firstName, lastName, healthCondition is required" });
+    }
+
+    const collection = db.collection(COLLECTIONS.users);
+    const result = await collection.insertOne({
+      firstName,
+      lastName,
+      healthCondition
+    });
+    res.json({
+      response: "User added succesfully.",
+      insertedId: result.insertedId,
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.patch("/patchUser/:userId", express.json(), async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    if (!ObjectId.isValid(userId)) {
+      return res.status(400).json({ error: "Invalid User ID." });
+    }
+
+    const { firstName, lastName, healthCondition} = req.body;
+    if (!firstName && !lastName && !healthCondition) {
+      return res
+        .status(400)
+        .json({ error: "Must have at least one of firstName or lastName or healthCondition" });
+    }
+
+    const collection = db.collection(COLLECTIONS.users);
+    const data = await collection.updateOne({
+      _id: new ObjectId(userId),
+    }, {
+      $set: {
+        ...(firstName && {firstName}),
+        ...(lastName && {lastName}),
+        ...(healthCondition && {healthCondition})
+      }
+    });
+
+    if (data.matchedCount === 0) {
+      return res
+        .status(404)
+        .json({ error: "Unable to find user with given ID." });
+    }
+    res.json({ response: `Document with ID ${userId} patched.` });
+  } catch (error) {
+    res.status(500).json({error: error.message})
+  }
+});
