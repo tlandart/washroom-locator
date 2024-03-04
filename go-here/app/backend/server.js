@@ -84,3 +84,38 @@ app.post("/postWashroom", express.json(), async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+app.patch("/patchWashroom/:washroomId", express.json(), async (req, res) => {
+  try {
+    const washroomId = req.params.washroomId;
+    if (!ObjectId.isValid(washroomId)) {
+      return res.status(400).json({ error: "Invalid Washroom ID." });
+    }
+
+    const { title, address } = req.body;
+    if (!title && !address) {
+      return res
+        .status(400)
+        .json({ error: "Must have at least one of title or address." });
+    }
+
+    const collection = db.collection(COLLECTIONS.washrooms);
+    const data = await collection.updateOne({
+      _id: new ObjectId(washroomId),
+    }, {
+      $set: {
+        ...(title && {title}),
+        ...(address && {address})
+      }
+    });
+
+    if (data.matchedCount === 0) {
+      return res
+        .status(404)
+        .json({ error: "Unable to find washroom with given ID." });
+    }
+    res.json({ response: `Document with ID ${washroomId} patched.` });
+  } catch (error) {
+    res.status(500).json({error: error.message})
+  }
+})
