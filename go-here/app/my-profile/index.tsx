@@ -1,6 +1,5 @@
 import { StyleSheet, View, Text, Button, TextInput, Modal, TouchableOpacity} from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { Picker } from '@react-native-picker/picker';
 
 export default function MyProfile() {
   const [firstName, setFirstName] = useState("");
