@@ -5,6 +5,7 @@ import { Link } from "expo-router";
 
 export default function SettingsScreen() {
 
+  //Change TouchableOpacity to use Pressable
   return (
     <View style={styles.container}>
       <Text style={styles.title}>MY PROFILE</Text>
