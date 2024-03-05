@@ -1,31 +1,113 @@
-import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+import { StatusBar, StyleSheet } from "react-native";
+import { View } from "@/components/Themed";
+import MapView, { LatLng, Marker } from "react-native-maps";
+import { Image, Text } from "react-native";
+import BottomSheet from "@gorhom/bottom-sheet";
+import { SetStateAction, useEffect, useMemo, useRef, useState } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import ExploreEntry from "../explore-entry";
 
 export default function TabOneScreen() {
+  const [loading, setLoading] = useState(true);
+  const [locations, setLocations] = useState<any[]>([]);
+
+  useEffect(() => {
+    const getNotes = async () => {
+      try {
+        await fetch("https://localhost:4000/getAllWashrooms")
+        .then(async (response) => {
+          if (!response.ok) {
+            alert("Server failed: " + response.status);
+          } else {
+              await response.json().then((data) => {
+              getLocationState(data.response);
+          }) 
+          }
+        });
+      } catch (error) {
+        alert("Fetch function failed: " + error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getNotes()
+  }, []);
+
+  const getLocationState = (data: SetStateAction<any[]>) => {
+    setLocations(data);
+  }
+
+  const mapPoints: LatLng[] = useMemo(() => [{latitude: 0, longitude: 0}, {latitude: 1, longitude: 1}], []);
+  
+  const snapPoints = useMemo(() => ['12%', '36%', '92%'], []);
+
+  const mapRef = useRef(null);
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Explore</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      
-    </View>
+    <GestureHandlerRootView style={styles.root}>
+      <View style={styles.container}>
+          <StatusBar
+            barStyle={'dark-content'}
+          />
+          <MapView
+            provider="google"
+            style={styles.map}
+            ref={mapRef}
+            showsUserLocation={true}
+            showsMyLocationButton={true}>
+              {mapPoints.map(function(d, idx){
+                return (
+                <Marker key={idx} coordinate={d}>
+                  <Image
+                    source={require("../../assets/images/gohere-pin.png")}
+                    style={{height: 45, resizeMode: "contain"}}
+                  />
+                </Marker>
+              )})}
+          </MapView>
+          <BottomSheet snapPoints={snapPoints}>
+            <View style={styles.sheetTop}>
+              <View style={styles.separator} />
+            </View>
+            {locations.map(function(d: any, idx: number){
+              return (
+                <ExploreEntry key={idx}>
+                  <Text>
+                    { JSON.parse(JSON.stringify(d)).title }
+                  </Text>
+                </ExploreEntry>
+              )})}
+          </BottomSheet>
+      </View>
+    </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
+  root: {
+    ...StyleSheet.absoluteFillObject,
+  },
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "lightgrey",
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  map: {
+    ...StyleSheet.absoluteFillObject,
+    height: "88%",
+  },
+  sheetTop: {
+    flex: 1,
+    maxHeight: 50,
+    alignItems: "center",
+    backgroundColor: "transparent",
   },
   separator: {
-    marginVertical: 30,
+    marginVertical: 25,
     height: 1,
-    width: '80%',
+    width: '90%',
+    backgroundColor: "lightgrey"
   },
 });
