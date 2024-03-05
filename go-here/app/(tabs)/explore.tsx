@@ -15,7 +15,6 @@ export default function TabOneScreen() {
   }
 
   const moveToMarker = (i: number) => {
-    mapRef.current?.boundingBoxForRegion
     mapRef.current?.animateToRegion(
       {latitude: locations.at(i).latitude,
        longitude: locations.at(i).longitude,
