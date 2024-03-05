@@ -63,18 +63,20 @@ app.get("/getWashroom/:washroomId", express.json(), async (req, res) => {
 
 app.post("/postWashroom", express.json(), async (req, res) => {
   try {
-    const { title, address } = req.body;
+    const { title, address, longitude, latitude } = req.body;
 
-    if (!title || !address) {
+    if (!title || !address || !longitude || !latitude) {
       return res
         .status(400)
-        .json({ error: "Title and Address are both required." });
+        .json({ error: "Title, Address, Longitude, and Latitude are required." });
     }
 
     const collection = db.collection(COLLECTIONS.washrooms);
     const result = await collection.insertOne({
       title,
-      address
+      address,
+      longitude,
+      latitude
     });
     res.json({
       response: "Washroom added succesfully.",
@@ -93,11 +95,11 @@ app.patch("/patchWashroom/:washroomId", express.json(), async (req, res) => {
       return res.status(400).json({ error: "Invalid Washroom ID." });
     }
 
-    const { title, address } = req.body;
-    if (!title && !address) {
+    const { title, address, longitude, latitude } = req.body;
+    if (!title && !address && !longitude && !latitude) {
       return res
         .status(400)
-        .json({ error: "Must have at least one of title or address." });
+        .json({ error: "Must have at least one of title, address, longitude, or latitude." });
     }
 
     const collection = db.collection(COLLECTIONS.washrooms);
@@ -106,7 +108,9 @@ app.patch("/patchWashroom/:washroomId", express.json(), async (req, res) => {
     }, {
       $set: {
         ...(title && {title}),
-        ...(address && {address})
+        ...(address && {address}),
+        ...(longitude && {longitude}),
+        ...(latitude && {latitude})
       }
     });
 
