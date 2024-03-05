@@ -26,6 +26,11 @@ export default function TabOneScreen() {
   useEffect(() => {
     const getNotes = async () => {
       try {
+        /* For dev testing:
+         * Get this link by running "npx localtunnel --port 4000" in the /backend/ directory AFTER starting the MongoDB server.
+         * This allows the expo app to access the server (it can't acces localhost).
+         * Ensure that the phone and computer are ON THE SAME NETWORK.
+         */
         await fetch("https://better-phones-attend.loca.lt/getAllWashrooms")
         .then(async (response) => {
           if (!response.ok) {
