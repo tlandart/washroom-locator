@@ -1,7 +1,7 @@
 import { StatusBar, StyleSheet } from "react-native";
-import { View } from "@/components/Themed";
+import { Text, View } from '@/components/Themed';
 import MapView, { LatLng, Marker } from "react-native-maps";
-import { Image, Text } from "react-native";
+import { Image } from "react-native";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -14,7 +14,7 @@ export default function TabOneScreen() {
   useEffect(() => {
     const getNotes = async () => {
       try {
-        await fetch("https://localhost:4000/getAllWashrooms")
+        await fetch("https://afraid-geckos-attack.loca.lt/getAllWashrooms")
         .then(async (response) => {
           if (!response.ok) {
             alert("Server failed: " + response.status);
