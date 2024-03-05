@@ -1,9 +1,21 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
+import { Text, View } from '@/components/Themed';
 
-const ExploreEntry = ({ children }: any) => {
+const ExploreEntry = ({ title, address, latitude, longitude }: any) => {
   return (
     <View style={styles.container}>
-        {children}
+        <Text style={styles.text}>
+          title: {title}
+        </Text>
+        <Text style={styles.text}>
+          address: {address}
+        </Text>
+        <Text style={styles.text}>
+          latitude: {latitude}
+        </Text>
+        <Text style={styles.text}>
+          longitude: {longitude}
+        </Text>
     </View>
   );
 }
@@ -13,8 +25,11 @@ const styles = StyleSheet.create({
     height: 100,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "lightgrey",
+    backgroundColor: "transparent",
   },
+  text: {
+    color: "black"
+  }
 });
 
 export default ExploreEntry;

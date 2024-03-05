@@ -1,8 +1,7 @@
-import { StatusBar, StyleSheet } from "react-native";
-import { Text, View } from '@/components/Themed';
+import { StatusBar, StyleSheet, Image } from "react-native";
+import { View, Text } from '@/components/Themed';
 import MapView, { LatLng, Marker } from "react-native-maps";
-import { Image } from "react-native";
-import BottomSheet from "@gorhom/bottom-sheet";
+import BottomSheet, { TouchableOpacity } from "@gorhom/bottom-sheet";
 import { SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ExploreEntry from "../explore-entry";
@@ -11,10 +10,24 @@ export default function TabOneScreen() {
   const [loading, setLoading] = useState(true);
   const [locations, setLocations] = useState<any[]>([]);
 
+  const getLocationState = (data: SetStateAction<any[]>) => {
+    setLocations(data);
+  }
+
+  const moveToMarker = (i: number) => {
+    mapRef.current?.boundingBoxForRegion
+    mapRef.current?.animateToRegion(
+      {latitude: locations.at(i).latitude,
+       longitude: locations.at(i).longitude,
+       latitudeDelta: 0.01,
+       longitudeDelta: 0.01,
+      }, 250)
+  }
+
   useEffect(() => {
     const getNotes = async () => {
       try {
-        await fetch("https://afraid-geckos-attack.loca.lt/getAllWashrooms")
+        await fetch("https://better-phones-attend.loca.lt/getAllWashrooms")
         .then(async (response) => {
           if (!response.ok) {
             alert("Server failed: " + response.status);
@@ -33,16 +46,10 @@ export default function TabOneScreen() {
 
     getNotes()
   }, []);
-
-  const getLocationState = (data: SetStateAction<any[]>) => {
-    setLocations(data);
-  }
-
-  const mapPoints: LatLng[] = useMemo(() => [{latitude: 0, longitude: 0}, {latitude: 1, longitude: 1}], []);
   
   const snapPoints = useMemo(() => ['12%', '36%', '92%'], []);
 
-  const mapRef = useRef(null);
+  const mapRef = useRef<MapView>(null);
 
   return (
     <GestureHandlerRootView style={styles.root}>
@@ -56,9 +63,12 @@ export default function TabOneScreen() {
             ref={mapRef}
             showsUserLocation={true}
             showsMyLocationButton={true}>
-              {mapPoints.map(function(d, idx){
+              {locations.map(function(d, idx){
                 return (
-                <Marker key={idx} coordinate={d}>
+                <Marker key={idx}
+                  coordinate={
+                    {latitude: JSON.parse(JSON.stringify(d)).latitude,
+                     longitude: JSON.parse(JSON.stringify(d)).longitude}}>
                   <Image
                     source={require("../../assets/images/gohere-pin.png")}
                     style={{height: 45, resizeMode: "contain"}}
@@ -70,14 +80,22 @@ export default function TabOneScreen() {
             <View style={styles.sheetTop}>
               <View style={styles.separator} />
             </View>
-            {locations.map(function(d: any, idx: number){
+            {!loading && locations.map(function(d: any, idx: number){
+              const parsed = JSON.parse(JSON.stringify(d));
               return (
-                <ExploreEntry key={idx}>
-                  <Text>
-                    { JSON.parse(JSON.stringify(d)).title }
-                  </Text>
-                </ExploreEntry>
+                <TouchableOpacity key={idx} onPress={() => moveToMarker(idx)}>
+                  <ExploreEntry
+                    title={JSON.parse(JSON.stringify(d)).title}
+                    address={JSON.parse(JSON.stringify(d)).address}
+                    latitude={JSON.parse(JSON.stringify(d)).latitude}
+                    longitude={JSON.parse(JSON.stringify(d)).longitude}/>
+                </TouchableOpacity>
               )})}
+              {loading &&
+                <ExploreEntry title="Loading database..."
+                              address="N/A"
+                              latitude="N/A"
+                              longitude="N/A"/>}
           </BottomSheet>
       </View>
     </GestureHandlerRootView>
