@@ -1,31 +1,66 @@
-import { StyleSheet } from 'react-native';
-
+import { StyleSheet, Text, Button, TouchableOpacity, Pressable } from 'react-native';
 import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+import { View } from '@/components/Themed';
+import { Link } from "expo-router";
 
-export default function TabThreeScreen() {
+export default function SettingsScreen() {
+
+  //Change TouchableOpacity to use Pressable
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Settings</Text>
+      <Text style={styles.title}>MY PROFILE</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      
+      <TouchableOpacity style={styles.button}>
+        <Link href="/my-profile/">My Profile</Link>
+      </TouchableOpacity>
+
+      <Text style={styles.title}>APP SETTINGS</Text>
+      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <TouchableOpacity style={styles.button}>
+        <Text>Location Permission</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button}>
+        <Text>Analytics</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.title}>PRIVACY AND TERMS</Text>
+      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <TouchableOpacity style={styles.button}>
+        <Text>Privacy Policy</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.title}>SUPPORT</Text>
+      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <TouchableOpacity style={styles.button}>
+        <Text>Request Support</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button}>
+        <Text>Version</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  button: {
+    width: '80%',
+    marginTop: 10,
+    marginBottom: 0,
+  },
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
+    marginTop: 30,
   },
   separator: {
     marginVertical: 30,
     height: 1,
     width: '80%',
+    marginTop: 10,
+    marginBottom: 10,
   },
 });
