@@ -38,7 +38,7 @@ const COLLECTIONS = {
 
 app.get("/getAllWashrooms", express.json(), async (req, res) => {
     try {
-        const collection = db.collection(COLLECTIONS.users);
+        const collection = db.collection(COLLECTIONS.washrooms);
         const data = await collection.find().toArray();
         res.json({ response: data });
       } catch (error) {
