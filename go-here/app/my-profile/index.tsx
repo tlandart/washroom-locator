@@ -16,7 +16,7 @@ export default function MyProfile() {
           <Text style={styles.title}>First Name</Text>
           <TextInput style={styles.input} value={firstName} onChangeText={(newFirstName) => setFirstName(newFirstName)} placeholder="Enter first name" placeholderTextColor={"grey"}/>
           <Text style={styles.title}>Last Name</Text>
-          <TextInput style={styles.input} value={lastName} onChangeText={(newLastName) => setFirstName(newLastName)} placeholder="Enter last name" placeholderTextColor={"grey"}/>
+          <TextInput style={styles.input} value={lastName} onChangeText={(newLastName) => setLastName(newLastName)} placeholder="Enter last name" placeholderTextColor={"grey"}/>
           <Text style={styles.title}>Health Condition</Text>
           <TouchableOpacity style={styles.input} onPress={() => setModalVisible(true)}>
             <Text>{healthCondition ? healthCondition : "Select Here"}</Text>
