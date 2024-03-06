@@ -31,7 +31,7 @@ export default function TabOneScreen() {
          * This allows the expo app to access the server (it can't acces localhost).
          * Ensure that the phone and computer are ON THE SAME NETWORK.
          */
-        await fetch("https://better-phones-attend.loca.lt/getAllWashrooms")
+        await fetch("https://itchy-crabs-swim.loca.lt/getAllWashrooms")
         .then(async (response) => {
           if (!response.ok) {
             alert("Server failed: " + response.status);
@@ -58,9 +58,9 @@ export default function TabOneScreen() {
   return (
     <GestureHandlerRootView style={styles.root}>
       <View style={styles.container}>
-          <StatusBar
+          {/* <StatusBar
             barStyle={'dark-content'}
-          />
+          /> */}
           <MapView
             provider="google"
             style={styles.map}
