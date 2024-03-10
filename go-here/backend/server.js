@@ -33,7 +33,8 @@ app.use(cors());
 
 const COLLECTIONS = {
     washrooms: "washrooms",
-    users: "users"
+    users: "users",
+    requested: "requested"
   };
 
 app.get("/getAllWashrooms", express.json(), async (req, res) => {
@@ -55,6 +56,12 @@ app.get("/getWashroom/:washroomId", express.json(), async (req, res) => {
 
     const collection = db.collection(COLLECTIONS.washrooms);
     const data = await collection.findOne(new ObjectId(washroomId));
+
+    if (data.matchedCount === 0) {
+      return res
+        .status(404)
+        .json({ error: "Unable to find washroom with given ID." });
+    }
     res.json({ response: data });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -134,6 +141,12 @@ app.get("/getUser/:userId", express.json(), async (req, res) => {
 
     const collection = db.collection(COLLECTIONS.users);
     const data = await collection.findOne(new ObjectId(userId));
+
+    if (data.matchedCount === 0) {
+      return res
+        .status(404)
+        .json({ error: "Unable to find user  with given ID." });
+    }
     res.json({ response: data });
   } catch (error) {
     res.status(500).json({ error: error.message });
