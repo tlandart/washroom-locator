@@ -270,7 +270,7 @@ app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) =>
     const requestCollection = db.collection(COLLECTIONS.requested);
 
     if(status === "ACCEPTED"){
-      const result = await washroomCollection.insertOne({
+      const washroomData = await washroomCollection.insertOne({
         title,
         address,
         longitude,
@@ -279,21 +279,27 @@ app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) =>
       res.json({
         response: "Washroom added succesfully.",
         insertedId: result.insertedId,
-      });
-      const dataRequest = await requestCollection.deleteOne({
+      }); 
+      const requestData = await requestCollection.deleteOne({
         _id: new ObjectId(washroomId),
       });
+      
+      if (requestData.matchedCount === 0 || washroomData.matchedCount === 0) {
+        return res
+          .status(404)
+          .json({ error: "Unable to find accepted washroom with given ID." });
+      } 
     } else if (status === "DECLINED"){
-      const data = await requestCollection.deleteOne({
+      const requestData = await requestCollection.deleteOne({
         _id: new ObjectId(washroomId),
       });
+      if (requestData.matchedCount === 0) {
+        return res
+          .status(404)
+          .json({ error: "Unable to find declined washroom with given ID." });
+      } 
     }
 
-    if (data.matchedCount === 0) {
-      return res
-        .status(404)
-        .json({ error: "Unable to find washroom with given ID." });
-    } 
     res.json({ response: `Document with ID ${washroomId} patched.` });
   } catch (error) {
     res.status(500).json({error: error.message})
