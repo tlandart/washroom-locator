@@ -270,11 +270,12 @@ app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) =>
     const requestCollection = db.collection(COLLECTIONS.requested);
 
     if(status === "ACCEPTED"){
+      const newWashroomData = await requestCollection.findOne(new ObjectId(washroomId));
       const washroomData = await washroomCollection.insertOne({
-        title,
-        address,
-        longitude,
-        latitude
+        title: newWashroomData.title,
+        address: newWashroomData.address,
+        longitude: newWashroomData.longitude,
+        latitude: newWashroomData.latitude
       });
       res.json({
         response: "Washroom added succesfully.",
