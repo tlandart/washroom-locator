@@ -270,8 +270,8 @@ app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) =>
     const requestCollection = db.collection(COLLECTIONS.requested);
 
     if(status === "ACCEPTED"){
-      const newWashroomData = await requestCollection.findOne(new ObjectId(washroomId));
-      const washroomData = await washroomCollection.insertOne({
+      const washroomData = await requestCollection.findOne(new ObjectId(washroomId));
+      const newWashroomData = await washroomCollection.insertOne({
         title: newWashroomData.title,
         address: newWashroomData.address,
         longitude: newWashroomData.longitude,
@@ -285,7 +285,7 @@ app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) =>
         _id: new ObjectId(washroomId),
       });
       
-      if (requestData.matchedCount === 0 || washroomData.matchedCount === 0) {
+      if (newWashroomData.matchedCount === 0 || washroomData.matchedCount === 0) {
         return res
           .status(404)
           .json({ error: "Unable to find accepted washroom with given ID." });
