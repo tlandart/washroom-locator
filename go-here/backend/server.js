@@ -214,3 +214,88 @@ app.patch("/patchUser/:userId", express.json(), async (req, res) => {
     res.status(500).json({error: error.message})
   }
 });
+
+app.get("/getAllRequested", express.json(), async (req, res) => {
+  try {
+      const collection = db.collection(COLLECTIONS.requested);
+      const data = await collection.find().toArray();
+      res.json({ response: data });
+    } catch (error) {
+      res.status(500).json({error: error.message})
+    }
+});
+
+app.post("/postWashroomRequest", express.json(), async (req, res) => {
+  try {
+    const { title, address, longitude, latitude } = req.body;
+
+    if (!title || !address || !longitude || !latitude) {
+      return res
+        .status(400)
+        .json({ error: "Title, Address, Longitude, and Latitude are required." });
+    }
+
+    const collection = db.collection(COLLECTIONS.requested);
+    const result = await collection.insertOne({
+      title,
+      address,
+      longitude,
+      latitude
+    });
+    res.json({
+      response: "Washroom request added succesfully.",
+      insertedId: result.insertedId,
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) => {
+  try {
+    const washroomId = req.params.washroomId;
+    if (!ObjectId.isValid(washroomId)) {
+      return res.status(400).json({ error: "Invalid Washroom ID." });
+    }
+
+    const { status } = req.body;
+    if (!status || status != "ACCEPTED" || status != "DECLINED") {
+      return res
+        .status(400)
+        .json({ error: "Must have status of either \"ACCEPTED\" or \"DECLINED\"." });
+    }
+
+    const washroomCollection = db.collection(COLLECTIONS.washrooms);
+    const requestCollection = db.collection(COLLECTIONS.requested);
+
+    if(status === "ACCEPTED"){
+      const dataWashroom = await washroomCollection.updateOne({
+        _id: new ObjectId(washroomId),
+      }, {
+        $set: {
+          ...(title && {title}),
+          ...(address && {address}),
+          ...(longitude && {longitude}),
+          ...(latitude && {latitude})
+        }
+      });
+      const dataRequest = await requestCollection.deleteOne({
+        _id: new ObjectId(washroomId),
+      });
+    } else if (status === "DECLINED"){
+      const data = await requestCollection.deleteOne({
+        _id: new ObjectId(washroomId),
+      });
+    }
+
+    if (data.matchedCount === 0) {
+      return res
+        .status(404)
+        .json({ error: "Unable to find washroom with given ID." });
+    } 
+    res.json({ response: `Document with ID ${washroomId} patched.` });
+  } catch (error) {
+    res.status(500).json({error: error.message})
+  } 
+});
