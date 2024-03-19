@@ -34,6 +34,7 @@ app.use(cors());
 const COLLECTIONS = {
     washrooms: "washrooms",
     users: "users",
+    requested: "requested",
     sponsors: "sponsors"
   };
 
@@ -51,7 +52,7 @@ app.post("/postSponsor", express.json(), async (req, res) => {
   try {
     const { title, sponsorlvl } = req.body;
 
-    if (!title) {
+    if (!title || sponsorlvl == null || !(sponsorlvl >= 0 && sponsorlvl <= 3)) {
       return res
         .status(400)
         .json({ error: "Title and sponsorlvl 0, 1, 2, or 3 are required." });
@@ -80,6 +81,11 @@ app.patch("/patchSponsorlvl/:sponsorId", express.json(), async (req, res) => {
     }
 
     const { sponsorlvl } = req.body;
+    if (sponsorlvl == null || !(sponsorlvl >= 0 && sponsorlvl <= 3)) {
+      return res
+        .status(400)
+        .json({ error: "sponsorlvl 0, 1, 2, or 3 are required." });
+    }
     
     const collection = db.collection(COLLECTIONS.sponsors);
     const data = await collection.updateOne({
@@ -143,6 +149,12 @@ app.get("/getWashroom/:washroomId", express.json(), async (req, res) => {
 
     const collection = db.collection(COLLECTIONS.washrooms);
     const data = await collection.findOne(new ObjectId(washroomId));
+
+    if (data.matchedCount === 0) {
+      return res
+        .status(404)
+        .json({ error: "Unable to find washroom with given ID." });
+    }
     res.json({ response: data });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -153,11 +165,16 @@ app.post("/postWashroom", express.json(), async (req, res) => {
   try {
     const { title, address, longitude, latitude, sponsorlvl } = req.body;
 
-    if (!title || !address || !longitude || !latitude) {
+    if (!title || !address || !longitude || !latitude || sponsorlvl == null) {
       return res
         .status(400)
-        .json({ error: "Title, Address, Longitude, Latitude, and sponsorlvl 0, 1, 2, or 3 are required." });
+        .json({ error: "Title, Address, Longitude, Latitude, and sponsorlvl are required." });
+    } else if (!(sponsorlvl >= 0 && sponsorlvl <= 3)){
+      return res
+        .status(400)
+        .json({ error: "sponsorlvl 0, 1, 2, or 3 are required." });
     }
+
 
     const collection = db.collection(COLLECTIONS.washrooms);
     const result = await collection.insertOne({
@@ -185,10 +202,14 @@ app.patch("/patchWashroom/:washroomId", express.json(), async (req, res) => {
     }
 
     const { title, address, longitude, latitude, sponsorlvl } = req.body;
-    if (!title && !address && !longitude && !latitude) {
+    if (!title && !address && !longitude && !latitude && sponsorlvl == null) {
       return res
         .status(400)
         .json({ error: "Must have at least one of title, address, longitude, latitude, or sponsorlvl." });
+    } else if (!(sponsorlvl >= 0 && sponsorlvl <= 3)){
+      return res
+        .status(400)
+        .json({ error: "sponsorlvl 0, 1, 2, or 3 are required." });
     }
 
     const collection = db.collection(COLLECTIONS.washrooms);
@@ -224,6 +245,12 @@ app.get("/getUser/:userId", express.json(), async (req, res) => {
 
     const collection = db.collection(COLLECTIONS.users);
     const data = await collection.findOne(new ObjectId(userId));
+
+    if (data.matchedCount === 0) {
+      return res
+        .status(404)
+        .json({ error: "Unable to find user  with given ID." });
+    }
     res.json({ response: data });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -290,4 +317,98 @@ app.patch("/patchUser/:userId", express.json(), async (req, res) => {
   } catch (error) {
     res.status(500).json({error: error.message})
   }
+});
+
+app.get("/getAllRequested", express.json(), async (req, res) => {
+  try {
+      const collection = db.collection(COLLECTIONS.requested);
+      const data = await collection.find().toArray();
+      res.json({ response: data });
+    } catch (error) {
+      res.status(500).json({error: error.message})
+    }
+});
+
+app.post("/postWashroomRequest", express.json(), async (req, res) => {
+  try {
+    const { title, address, longitude, latitude } = req.body;
+
+    if (!title || !address || !longitude || !latitude) {
+      return res
+        .status(400)
+        .json({ error: "Title, Address, Longitude, and Latitude are required." });
+    }
+
+    const collection = db.collection(COLLECTIONS.requested);
+    const result = await collection.insertOne({
+      title,
+      address,
+      longitude,
+      latitude
+    });
+    res.json({
+      response: "Washroom request added succesfully.",
+      insertedId: result.insertedId,
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) => {
+  try {
+    const washroomId = req.params.washroomId;
+    if (!ObjectId.isValid(washroomId)) {
+      return res.status(400).json({ error: "Invalid Washroom ID." });
+    }
+
+    const { status } = req.body;
+    if (!status && status != "ACCEPTED" && status != "DECLINED") {
+      return res
+        .status(400)
+        .json({ error: "Must have status of either \"ACCEPTED\" or \"DECLINED\"." });
+    }
+
+    const washroomCollection = db.collection(COLLECTIONS.washrooms);
+    const requestCollection = db.collection(COLLECTIONS.requested);
+
+    if(status === "ACCEPTED"){
+      const washroomData = await requestCollection.findOne(new ObjectId(washroomId));
+      const newWashroomData = await washroomCollection.insertOne({
+        title: washroomData.title,
+        address: washroomData.address,
+        longitude: washroomData.longitude,
+        latitude: washroomData.latitude
+      });
+      res.json({
+        response: "Washroom added succesfully.",
+        insertedId: newWashroomData.insertedId,
+      }); 
+      const requestData = await requestCollection.deleteOne({
+        _id: new ObjectId(washroomId),
+      });
+
+      if (newWashroomData.matchedCount === 0 || washroomData.matchedCount === 0) {
+        return res
+          .status(404)
+          .json({ error: "Unable to find accepted washroom with given ID." });
+      } 
+      
+      return res
+    } else if (status === "DECLINED"){
+      const requestData = await requestCollection.deleteOne({
+        _id: new ObjectId(washroomId),
+      });
+      if (requestData.matchedCount === 0) {
+        return res
+          .status(404)
+          .json({ error: "Unable to find declined washroom with given ID." });
+      } 
+    }
+
+    res.json({ response: `Document with ID ${washroomId} patched.` });
+  } catch (error) {
+    res.status(500).json({error: error.message})
+  } 
 });
