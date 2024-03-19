@@ -52,7 +52,7 @@ app.post("/postSponsor", express.json(), async (req, res) => {
   try {
     const { title, sponsorlvl } = req.body;
 
-    if (!title) {
+    if (!title || sponsorlvl == null || !(sponsorlvl >= 0 && sponsorlvl <= 3)) {
       return res
         .status(400)
         .json({ error: "Title and sponsorlvl 0, 1, 2, or 3 are required." });
@@ -81,6 +81,11 @@ app.patch("/patchSponsorlvl/:sponsorId", express.json(), async (req, res) => {
     }
 
     const { sponsorlvl } = req.body;
+    if (sponsorlvl == null || !(sponsorlvl >= 0 && sponsorlvl <= 3)) {
+      return res
+        .status(400)
+        .json({ error: "sponsorlvl 0, 1, 2, or 3 are required." });
+    }
     
     const collection = db.collection(COLLECTIONS.sponsors);
     const data = await collection.updateOne({
@@ -160,11 +165,16 @@ app.post("/postWashroom", express.json(), async (req, res) => {
   try {
     const { title, address, longitude, latitude, sponsorlvl } = req.body;
 
-    if (!title || !address || !longitude || !latitude) {
+    if (!title || !address || !longitude || !latitude || sponsorlvl == null) {
       return res
         .status(400)
-        .json({ error: "Title, Address, Longitude, Latitude, and sponsorlvl 0, 1, 2, or 3 are required." });
+        .json({ error: "Title, Address, Longitude, Latitude, and sponsorlvl are required." });
+    } else if (!(sponsorlvl >= 0 && sponsorlvl <= 3)){
+      return res
+        .status(400)
+        .json({ error: "sponsorlvl 0, 1, 2, or 3 are required." });
     }
+
 
     const collection = db.collection(COLLECTIONS.washrooms);
     const result = await collection.insertOne({
@@ -192,10 +202,14 @@ app.patch("/patchWashroom/:washroomId", express.json(), async (req, res) => {
     }
 
     const { title, address, longitude, latitude, sponsorlvl } = req.body;
-    if (!title && !address && !longitude && !latitude) {
+    if (!title && !address && !longitude && !latitude && sponsorlvl == null) {
       return res
         .status(400)
         .json({ error: "Must have at least one of title, address, longitude, latitude, or sponsorlvl." });
+    } else if (!(sponsorlvl >= 0 && sponsorlvl <= 3)){
+      return res
+        .status(400)
+        .json({ error: "sponsorlvl 0, 1, 2, or 3 are required." });
     }
 
     const collection = db.collection(COLLECTIONS.washrooms);
