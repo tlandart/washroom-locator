@@ -65,16 +65,10 @@ app.post("/postWashroom", express.json(), async (req, res) => {
   try {
     const { title, address, longitude, latitude, sponsorlvl } = req.body;
 
-    if (!title || !address || !longitude || !latitude || !sponsorlvl) {
+    if (!title || !address || !longitude || !latitude) {
       return res
         .status(400)
-        .json({ error: "Title, Address, Longitude, Latitude, and sponsorlvl are required." });
-    }
-
-    if (sponsorlvl != 0 || sponsorlvl != 1 || sponsorlvl != 2 || sponsorlvl != 3){
-      return res
-      .status(400)
-      .json({ error: "sponsorlvl must be a value 0, 1, 2, or 3" });
+        .json({ error: "Title, Address, Longitude, Latitude, and sponsorlvl 0, 1, 2, or 3 are required." });
     }
 
     const collection = db.collection(COLLECTIONS.washrooms);
@@ -103,7 +97,7 @@ app.patch("/patchWashroom/:washroomId", express.json(), async (req, res) => {
     }
 
     const { title, address, longitude, latitude, sponsorlvl } = req.body;
-    if (!title && !address && !longitude && !latitude && !sponsorlvl) {
+    if (!title && !address && !longitude && !latitude) {
       return res
         .status(400)
         .json({ error: "Must have at least one of title, address, longitude, latitude, or sponsorlvl." });
