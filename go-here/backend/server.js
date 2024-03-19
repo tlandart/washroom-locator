@@ -350,7 +350,7 @@ app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) =>
     }
 
     const { status } = req.body;
-    if (!status || status != "ACCEPTED" || status != "DECLINED") {
+    if (!status && status != "ACCEPTED" && status != "DECLINED") {
       return res
         .status(400)
         .json({ error: "Must have status of either \"ACCEPTED\" or \"DECLINED\"." });
@@ -362,24 +362,26 @@ app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) =>
     if(status === "ACCEPTED"){
       const washroomData = await requestCollection.findOne(new ObjectId(washroomId));
       const newWashroomData = await washroomCollection.insertOne({
-        title: newWashroomData.title,
-        address: newWashroomData.address,
-        longitude: newWashroomData.longitude,
-        latitude: newWashroomData.latitude
+        title: washroomData.title,
+        address: washroomData.address,
+        longitude: washroomData.longitude,
+        latitude: washroomData.latitude
       });
       res.json({
         response: "Washroom added succesfully.",
-        insertedId: result.insertedId,
+        insertedId: newWashroomData.insertedId,
       }); 
       const requestData = await requestCollection.deleteOne({
         _id: new ObjectId(washroomId),
       });
-      
+
       if (newWashroomData.matchedCount === 0 || washroomData.matchedCount === 0) {
         return res
           .status(404)
           .json({ error: "Unable to find accepted washroom with given ID." });
       } 
+      
+      return res
     } else if (status === "DECLINED"){
       const requestData = await requestCollection.deleteOne({
         _id: new ObjectId(washroomId),
