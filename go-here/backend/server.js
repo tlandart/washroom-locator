@@ -34,8 +34,96 @@ app.use(cors());
 const COLLECTIONS = {
     washrooms: "washrooms",
     users: "users",
-    requested: "requested"
+    requested: "requested",
+    sponsors: "sponsors"
   };
+
+  app.get("/getAllSponsors", express.json(), async (req, res) => {
+    try {
+        const collection = db.collection(COLLECTIONS.sponsors);
+        const data = await collection.find().toArray();
+        res.json({ response: data });
+      } catch (error) {
+        res.status(500).json({error: error.message})
+      }
+});
+
+app.post("/postSponsor", express.json(), async (req, res) => {
+  try {
+    const { title, sponsorlvl } = req.body;
+
+    if (!title) {
+      return res
+        .status(400)
+        .json({ error: "Title and sponsorlvl 0, 1, 2, or 3 are required." });
+    }
+
+    const collection = db.collection(COLLECTIONS.sponsors);
+    const result = await collection.insertOne({
+      title,
+      sponsorlvl
+    });
+    res.json({
+      response: "Sponsor added succesfully.",
+      insertedId: result.insertedId,
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.patch("/patchSponsorlvl/:sponsorId", express.json(), async (req, res) => {
+  try {
+    const sponsorId = req.params.sponsorId;
+    if (!ObjectId.isValid(sponsorId)) {
+      return res.status(400).json({ error: "Invalid sponsor ID." });
+    }
+
+    const { sponsorlvl } = req.body;
+    
+    const collection = db.collection(COLLECTIONS.sponsors);
+    const data = await collection.updateOne({
+      _id: new ObjectId(sponsorId),
+    }, {
+      $set: {
+        ...(sponsorlvl && {sponsorlvl})
+      }
+    });
+
+    if (data.matchedCount === 0) {
+      return res
+        .status(404)
+        .json({ error: "Unable to find sponsor with given ID." });
+    }
+    res.json({ response: `Document with ID ${sponsorId} patched.` });
+  } catch (error) {
+    res.status(500).json({error: error.message})
+  }
+});
+
+app.delete("/deleteSponsor/:sponsorId", express.json(), async (req, res) => {
+  try {
+    const sponsorId = req.params.sponsorId;
+    if (!ObjectId.isValid(sponsorId)) {
+      return res.status(400).json({ error: "Invalid sponsor ID." });
+    }
+
+    const collection = db.collection(COLLECTIONS.sponsors);
+    const data = await collection.deleteOne({
+      _id: new ObjectId(sponsorId),
+    });
+
+    if (data.deletedCount === 0) {
+      return res
+        .status(404)
+        .json({ error: "Unable to find sponsor with given ID." });
+    }
+    res.json({ response: `Document with ID ${sponsorId} deleted.` });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+})
 
 app.get("/getAllWashrooms", express.json(), async (req, res) => {
     try {
@@ -70,12 +158,12 @@ app.get("/getWashroom/:washroomId", express.json(), async (req, res) => {
 
 app.post("/postWashroom", express.json(), async (req, res) => {
   try {
-    const { title, address, longitude, latitude } = req.body;
+    const { title, address, longitude, latitude, sponsorlvl } = req.body;
 
     if (!title || !address || !longitude || !latitude) {
       return res
         .status(400)
-        .json({ error: "Title, Address, Longitude, and Latitude are required." });
+        .json({ error: "Title, Address, Longitude, Latitude, and sponsorlvl 0, 1, 2, or 3 are required." });
     }
 
     const collection = db.collection(COLLECTIONS.washrooms);
@@ -83,7 +171,8 @@ app.post("/postWashroom", express.json(), async (req, res) => {
       title,
       address,
       longitude,
-      latitude
+      latitude,
+      sponsorlvl
     });
     res.json({
       response: "Washroom added succesfully.",
@@ -102,11 +191,11 @@ app.patch("/patchWashroom/:washroomId", express.json(), async (req, res) => {
       return res.status(400).json({ error: "Invalid Washroom ID." });
     }
 
-    const { title, address, longitude, latitude } = req.body;
+    const { title, address, longitude, latitude, sponsorlvl } = req.body;
     if (!title && !address && !longitude && !latitude) {
       return res
         .status(400)
-        .json({ error: "Must have at least one of title, address, longitude, or latitude." });
+        .json({ error: "Must have at least one of title, address, longitude, latitude, or sponsorlvl." });
     }
 
     const collection = db.collection(COLLECTIONS.washrooms);
@@ -117,7 +206,8 @@ app.patch("/patchWashroom/:washroomId", express.json(), async (req, res) => {
         ...(title && {title}),
         ...(address && {address}),
         ...(longitude && {longitude}),
-        ...(latitude && {latitude})
+        ...(latitude && {latitude}),
+        ...(sponsorlvl && {sponsorlvl})
       }
     });
 
