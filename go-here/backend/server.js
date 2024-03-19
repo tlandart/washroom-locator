@@ -51,16 +51,10 @@ app.post("/postSponsor", express.json(), async (req, res) => {
   try {
     const { title, sponsorlvl } = req.body;
 
-    if (!title || !sponsorlvl) {
+    if (!title) {
       return res
         .status(400)
-        .json({ error: "Title and sponsorlvl are required." });
-    }
-    
-    if(sponsorlvl != 0 || sponsorlvl != 1 || sponsorlvl != 2 || sponsorlvl != 3){
-      return res
-        .status(400)
-        .json({ error: "sponsorlvl must be a value 0, 1, 2, or 3." });
+        .json({ error: "Title and sponsorlvl 0, 1, 2, or 3 are required." });
     }
 
     const collection = db.collection(COLLECTIONS.sponsors);
@@ -86,12 +80,7 @@ app.patch("/patchSponsorlvl/:sponsorId", express.json(), async (req, res) => {
     }
 
     const { sponsorlvl } = req.body;
-    if (!sponsorlvl || sponsorlvl.includes(0,1,2,3)) {
-      return res
-        .status(400)
-        .json({ error: "Must have sponsorlvl of value 0, 1, 2, or 3." });
-    }
-
+    
     const collection = db.collection(COLLECTIONS.sponsors);
     const data = await collection.updateOne({
       _id: new ObjectId(sponsorId),
