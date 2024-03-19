@@ -40,7 +40,4 @@ yarn-error.*
 expo-env.d.ts
 # @end expo-cli
 
-# database
 data
-
-.DS_Store
