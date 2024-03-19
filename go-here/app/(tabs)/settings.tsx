@@ -1,9 +1,29 @@
-import { StyleSheet, Text, Button, TouchableOpacity, Pressable } from 'react-native';
+import { StyleSheet, Text, TextInput, Button, TouchableOpacity, Pressable } from 'react-native';
 import EditScreenInfo from '@/components/EditScreenInfo';
+import React, { useState } from 'react';
 import { View } from '@/components/Themed';
 import { Link } from "expo-router";
+import { useNavigation } from '@react-navigation/native';
 
 export default function SettingsScreen() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigation = useNavigation();
+
+  //make user input of username and password only pop out after pressing login button
+  const [showLogin, setShowLogin] = useState(false);
+  <Button title="Admin Login" onPress={() => setShowLogin(true)} />
+
+  const handleLogin = () => {
+    const correctUsername = 'admin';
+    const correctPassword = '12345';
+    if (username === correctUsername && password === correctPassword) {
+      alert('Login confirmed');
+      navigation.navigate('admin');
+    } else {
+      alert('Incorrect username or password');
+    }
+  };
 
   //Change TouchableOpacity to use Pressable
   return (
@@ -37,6 +57,28 @@ export default function SettingsScreen() {
       <TouchableOpacity style={styles.button}>
         <Text>Version</Text>
       </TouchableOpacity>
+
+
+      <Text style={styles.title}>Admin</Text>
+      {showLogin ? (
+        <>
+          <TextInput
+            value={username}
+            onChangeText={setUsername}
+            placeholder="Enter username"
+            autoCapitalize="none" // to ensure username is case-insensitive
+          />
+          <TextInput
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            placeholder="Enter password"
+          />
+          <Button title="Submit" onPress={handleLogin} />
+        </>
+      ) : (
+        <Button title="Admin Login" onPress={() => setShowLogin(true)} />
+      )}
     </View>
   );
 }
