@@ -63,12 +63,18 @@ app.get("/getWashroom/:washroomId", express.json(), async (req, res) => {
 
 app.post("/postWashroom", express.json(), async (req, res) => {
   try {
-    const { title, address, longitude, latitude } = req.body;
+    const { title, address, longitude, latitude, sponsorlvl } = req.body;
 
-    if (!title || !address || !longitude || !latitude) {
+    if (!title || !address || !longitude || !latitude || !sponsorlvl) {
       return res
         .status(400)
-        .json({ error: "Title, Address, Longitude, and Latitude are required." });
+        .json({ error: "Title, Address, Longitude, Latitude, and sponsorlvl are required." });
+    }
+
+    if (sponsorlvl != 0 || sponsorlvl != 1 || sponsorlvl != 2 || sponsorlvl != 3){
+      return res
+      .status(400)
+      .json({ error: "sponsorlvl must be a value 0, 1, 2, or 3" });
     }
 
     const collection = db.collection(COLLECTIONS.washrooms);
@@ -76,7 +82,8 @@ app.post("/postWashroom", express.json(), async (req, res) => {
       title,
       address,
       longitude,
-      latitude
+      latitude,
+      sponsorlvl
     });
     res.json({
       response: "Washroom added succesfully.",
@@ -95,11 +102,11 @@ app.patch("/patchWashroom/:washroomId", express.json(), async (req, res) => {
       return res.status(400).json({ error: "Invalid Washroom ID." });
     }
 
-    const { title, address, longitude, latitude } = req.body;
-    if (!title && !address && !longitude && !latitude) {
+    const { title, address, longitude, latitude, sponsorlvl } = req.body;
+    if (!title && !address && !longitude && !latitude && !sponsorlvl) {
       return res
         .status(400)
-        .json({ error: "Must have at least one of title, address, longitude, or latitude." });
+        .json({ error: "Must have at least one of title, address, longitude, latitude, or sponsorlvl." });
     }
 
     const collection = db.collection(COLLECTIONS.washrooms);
@@ -110,7 +117,8 @@ app.patch("/patchWashroom/:washroomId", express.json(), async (req, res) => {
         ...(title && {title}),
         ...(address && {address}),
         ...(longitude && {longitude}),
-        ...(latitude && {latitude})
+        ...(latitude && {latitude}),
+        ...(sponsorlvl && {sponsorlvl})
       }
     });
 
