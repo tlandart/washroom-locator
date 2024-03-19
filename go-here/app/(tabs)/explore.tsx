@@ -1,14 +1,19 @@
-import { StatusBar, StyleSheet, Image } from "react-native";
+import { StyleSheet, Image } from "react-native";
 import { View, Text } from "@/components/Themed";
-import MapView, { LatLng, Marker } from "react-native-maps";
-import BottomSheet, { TouchableOpacity } from "@gorhom/bottom-sheet";
-import { SetStateAction, useEffect, useMemo, useRef, useState } from "react";
+import MapView, { Marker } from "react-native-maps";
+import BottomSheet, {
+  BottomSheetScrollView,
+  TouchableOpacity,
+} from "@gorhom/bottom-sheet";
+import { SetStateAction, useEffect, useRef, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ExploreEntry from "../explore-entry";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function TabOneScreen() {
   const [loading, setLoading] = useState(true);
   const [locations, setLocations] = useState<any[]>([]);
+  const [selectedLocation, setSelectedLocation] = useState(-1);
 
   const getLocationState = (data: SetStateAction<any[]>) => {
     setLocations(data);
@@ -28,17 +33,19 @@ export default function TabOneScreen() {
 
   const menuClickHandler = (i: number) => {
     moveToMarker(i);
+    setSelectedLocation(i);
     bottomSheetRef.current?.collapse();
     infoSheetRef.current?.expand();
   };
 
   const infoCloseHandler = () => {
     infoSheetRef.current?.close();
-    bottomSheetRef.current?.snapToIndex(1);
+    bottomSheetRef.current?.collapse();
+    setSelectedLocation(-1);
   };
 
   useEffect(() => {
-    const getNotes = async () => {
+    const getWashrooms = async () => {
       try {
         /* For dev testing:
          * Get this link by running "npx localtunnel --port 4000" in the /backend/ directory AFTER starting the MongoDB server.
@@ -63,7 +70,8 @@ export default function TabOneScreen() {
       }
     };
 
-    getNotes();
+    getWashrooms();
+    // infoCloseHandler();
   }, []);
 
   const mapRef = useRef<MapView>(null);
@@ -72,12 +80,32 @@ export default function TabOneScreen() {
 
   const infoSheetRef = useRef<BottomSheet>(null);
 
+  const infoSheetHandle = () => (
+    <View style={styles.sheetHandle}>
+      <View style={styles.sheetHandleIndicatorHolder}>
+        <View style={styles.sheetHandleIndicator} />
+      </View>
+      <TouchableOpacity onPress={() => infoCloseHandler()}>
+        <Ionicons
+          name="close-circle"
+          style={styles.infoSheetHandleCloseIcon}
+          size={35}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+
+  const bottomSheetHandle = () => (
+    <View style={styles.sheetHandle}>
+      <View style={styles.sheetHandleIndicatorHolder}>
+        <View style={styles.sheetHandleIndicator} />
+      </View>
+    </View>
+  );
+
   return (
     <GestureHandlerRootView style={styles.root}>
       <View style={styles.container}>
-        {/* <StatusBar
-            barStyle={'dark-content'}
-          /> */}
         <MapView
           provider="google"
           style={styles.map}
@@ -102,39 +130,53 @@ export default function TabOneScreen() {
             );
           })}
         </MapView>
-        <BottomSheet snapPoints={["12%", "36%", "92%"]} ref={bottomSheetRef}>
+        {/* Bottom Sheet. */}
+        <BottomSheet
+          snapPoints={["12%", "36%", "92%"]}
+          ref={bottomSheetRef}
+          handleComponent={bottomSheetHandle}
+          style={styles.sheetShadow}
+        >
           <View style={styles.sheetTop}>
+            <Text style={styles.bottomSheetTitle}>WASHROOMS</Text>
             <View style={styles.separator} />
           </View>
-          {!loading &&
-            locations.map(function (d: any, idx: number) {
-              return (
-                <TouchableOpacity
-                  key={idx}
-                  onPress={() => menuClickHandler(idx)}
-                >
-                  <ExploreEntry
-                    title={JSON.parse(JSON.stringify(d)).title}
-                    address={JSON.parse(JSON.stringify(d)).address}
-                    latitude={JSON.parse(JSON.stringify(d)).latitude}
-                    longitude={JSON.parse(JSON.stringify(d)).longitude}
-                  />
-                </TouchableOpacity>
-              );
-            })}
-          {loading && (
-            <ExploreEntry
-              title="Loading database..."
-              address="N/A"
-              latitude="N/A"
-              longitude="N/A"
-            />
-          )}
+          <BottomSheetScrollView>
+            {!loading &&
+              locations.map(function (d: any, idx: number) {
+                return (
+                  <TouchableOpacity
+                    key={idx}
+                    onPress={() => menuClickHandler(idx)}
+                  >
+                    <ExploreEntry
+                      title={JSON.parse(JSON.stringify(d)).title}
+                      address={JSON.parse(JSON.stringify(d)).address}
+                      latitude={JSON.parse(JSON.stringify(d)).latitude}
+                      longitude={JSON.parse(JSON.stringify(d)).longitude}
+                    />
+                  </TouchableOpacity>
+                );
+              })}
+            {loading && (
+              <ExploreEntry
+                title="Loading database..."
+                address="N/A"
+                latitude="N/A"
+                longitude="N/A"
+              />
+            )}
+          </BottomSheetScrollView>
         </BottomSheet>
-        <BottomSheet snapPoints={["42%", "92%"]} ref={infoSheetRef}>
-          <TouchableOpacity onPress={() => infoCloseHandler()}>
-            <Text>CLOSE CLOSE</Text>
-          </TouchableOpacity>
+        {/* Info Sheet. */}
+        <BottomSheet
+          snapPoints={["42%", "92%"]}
+          ref={infoSheetRef}
+          handleComponent={infoSheetHandle}
+          // If we don't check this, the shadow will stick out at the bottom even when it's closed.
+          style={selectedLocation == -1 ? null : styles.sheetShadow}
+        >
+          <Text>Selected: {selectedLocation}</Text>
         </BottomSheet>
       </View>
     </GestureHandlerRootView>
@@ -149,7 +191,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "lightgrey",
+    backgroundColor: "#fff",
   },
   map: {
     ...StyleSheet.absoluteFillObject,
@@ -157,14 +199,48 @@ const styles = StyleSheet.create({
   },
   sheetTop: {
     flex: 1,
-    maxHeight: 50,
+    maxHeight: 55,
     alignItems: "center",
     backgroundColor: "transparent",
   },
   separator: {
-    marginVertical: 25,
     height: 1,
     width: "90%",
     backgroundColor: "lightgrey",
+  },
+  sheetShadow: {
+    shadowOpacity: 0.1,
+  },
+  sheetHandle: {
+    flex: 1,
+    flexDirection: "row",
+    marginHorizontal: 25,
+  },
+  sheetHandleIndicatorHolder: {
+    width: "100%",
+    height: 35,
+    padding: 5,
+    justifyContent: "center",
+  },
+  sheetHandleIndicator: {
+    alignSelf: "center",
+    height: 6,
+    width: 45,
+    borderRadius: 4,
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+  },
+  bottomSheetTitle: {
+    width: "100%",
+    padding: 15,
+    fontSize: 17,
+    fontWeight: "500",
+    color: "red",
+  },
+  infoSheetHandleCloseIcon: {
+    position: "absolute",
+    right: -20,
+    top: 5,
+    color: "rgba(0, 0, 0, 0.4)",
+    textAlign: "right",
   },
 });
