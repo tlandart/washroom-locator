@@ -11,6 +11,8 @@ import ExploreEntry from "../explore-entry";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function TabOneScreen() {
+  const devLink = "https://eighty-zoos-enjoy.loca.lt";
+
   const [loading, setLoading] = useState(true);
   const [locations, setLocations] = useState<any[]>([]);
   const [selectedLocation, setSelectedLocation] = useState(-1);
@@ -52,7 +54,7 @@ export default function TabOneScreen() {
          * This allows the expo app to access the server (it can't access localhost).
          * Ensure that the phone and computer are ON THE SAME NETWORK.
          */
-        await fetch("https://dry-moles-hope.loca.lt/getAllWashrooms").then(
+        await fetch(devLink + "/getAllWashrooms").then(
           async (response) => {
             if (!response.ok) {
               alert("Server failed: " + response.status);

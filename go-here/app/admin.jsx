@@ -1,7 +1,10 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { useEffect, useState } from "react";
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
 
 export default function TabAdminScreen() {
+  const devLink = "https://eighty-zoos-enjoy.loca.lt";
+
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
@@ -10,7 +13,7 @@ export default function TabAdminScreen() {
 
   const fetchRequestedCollections = async () => {
       try {
-          const response = await fetch('https://wide-files-behave.loca.lt/getAllRequested');
+          const response = await fetch(devLink + '/getAllRequested');
           const data = await response.json();
           setRequests(data.response);
       } catch (error) {
@@ -20,7 +23,7 @@ export default function TabAdminScreen() {
 
   const handleAccept = async (requestId) => {
       try {
-          await fetch(`https://wide-files-behave.loca.lt/patchRequestStatus/${requestId}`, {
+          await fetch(devLink + `/patchRequestStatus/${requestId}`, {
               method: 'PATCH',
               headers: {
                   'Content-Type': 'application/json',
@@ -35,7 +38,7 @@ export default function TabAdminScreen() {
 
   const handleDecline = async (requestId) => {
       try {
-          await fetch(`https://wide-files-behave.loca.lt/patchRequestStatus/${requestId}`, {
+          await fetch(devLink + `/patchRequestStatus/${requestId}`, {
               method: 'PATCH',
               headers: {
                   'Content-Type': 'application/json',

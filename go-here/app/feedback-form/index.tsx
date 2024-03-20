@@ -10,6 +10,8 @@ import {
 import React, { useState, useEffect } from "react";
 
 export default function FeedbackForm() {
+  const devLink = "https://eighty-zoos-enjoy.loca.lt";
+
   const [feedback, setFeedback] = useState("");
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState("");
@@ -28,7 +30,7 @@ export default function FeedbackForm() {
        * This allows the expo app to access the server (it can't acces localhost).
        * Ensure that the phone and computer are ON THE SAME NETWORK.
        */
-      await fetch("https://dry-moles-hope.loca.lt/postFeedback", {
+      await fetch(devLink + "/postFeedback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ feedback }),
