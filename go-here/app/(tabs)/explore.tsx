@@ -7,12 +7,13 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import ExploreEntry from "../explore-entry";
+import ExploreEntry from "../../components/ExploreEntry";
 import NewWashroomButton from "@/components/NewWashroomButton";
 import { Ionicons } from "@expo/vector-icons";
+import ExploreInfo from "../../components/ExploreInfo";
 
 export default function TabOneScreen() {
-  const devLink = "https://eighty-zoos-enjoy.loca.lt";
+  const devLink = "https://few-spoons-beg.loca.lt";
 
   const [loading, setLoading] = useState(true);
   const [locations, setLocations] = useState<any[]>([]);
@@ -55,17 +56,15 @@ export default function TabOneScreen() {
          * This allows the expo app to access the server (it can't access localhost).
          * Ensure that the phone and computer are ON THE SAME NETWORK.
          */
-        await fetch(devLink + "/getAllWashrooms").then(
-          async (response) => {
-            if (!response.ok) {
-              alert("Server failed: " + response.status);
-            } else {
-              await response.json().then((data) => {
-                getLocationState(data.response);
-              });
-            }
+        await fetch(devLink + "/getAllWashrooms").then(async (response) => {
+          if (!response.ok) {
+            alert("Server failed: " + response.status);
+          } else {
+            await response.json().then((data) => {
+              getLocationState(data.response);
+            });
           }
-        );
+        });
       } catch (error) {
         alert("Fetch function failed: " + error);
       } finally {
@@ -117,6 +116,16 @@ export default function TabOneScreen() {
           showsMyLocationButton={true}
         >
           {locations.map(function (d, idx) {
+            const sl = JSON.parse(JSON.stringify(d)).sponsorlvl;
+            const path =
+              sl <= 0
+                ? require("../../assets/images/gohere-pin-0.png")
+                : sl == 1
+                ? require("../../assets/images/gohere-pin-1.png")
+                : sl == 2
+                ? require("../../assets/images/gohere-pin-2.png")
+                : require("../../assets/images/gohere-pin-3.png");
+
             return (
               <Marker
                 key={idx}
@@ -127,8 +136,8 @@ export default function TabOneScreen() {
                 onPress={() => menuClickHandler(idx)}
               >
                 <Image
-                  source={require("../../assets/images/gohere-pin.png")}
-                  style={{ height: 45, resizeMode: "contain" }}
+                  source={path}
+                  style={{ height: 60, width: 42, resizeMode: "contain" }}
                 />
               </Marker>
             );
@@ -171,18 +180,30 @@ export default function TabOneScreen() {
                 longitude="N/A"
               />
             )}
+            <NewWashroomButton />
           </BottomSheetScrollView>
-          <NewWashroomButton/>
         </BottomSheet>
         {/* Info Sheet. */}
         <BottomSheet
           snapPoints={["42%", "92%"]}
           ref={infoSheetRef}
           handleComponent={infoSheetHandle}
-          // If we don't check this, the shadow will stick out at the bottom even when it's closed.
+          /* If we don't check this, the shadow will make the sheet stick out at the bottom when it's closed. */
           style={selectedLocation == -1 ? null : styles.sheetShadow}
         >
-          <Text>Selected: {selectedLocation}</Text>
+          {selectedLocation >= 0 ? (
+            <BottomSheetScrollView>
+              <ExploreInfo
+                title={locations.at(selectedLocation).title}
+                address={locations.at(selectedLocation).address}
+                latitude={locations.at(selectedLocation).latitude}
+                longitude={locations.at(selectedLocation).longitude}
+                sponsorlvl={locations.at(selectedLocation).sponsorlvl}
+              />
+            </BottomSheetScrollView>
+          ) : (
+            <Text>ERROR</Text>
+          )}
         </BottomSheet>
       </View>
     </GestureHandlerRootView>
@@ -215,12 +236,14 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgrey",
   },
   sheetShadow: {
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 0 },
   },
   sheetHandle: {
     flex: 1,
     flexDirection: "row",
     marginHorizontal: 25,
+    marginBottom: 5,
   },
   sheetHandleIndicatorHolder: {
     width: "100%",
@@ -240,7 +263,7 @@ const styles = StyleSheet.create({
     padding: 15,
     fontSize: 17,
     fontWeight: "500",
-    color: "red",
+    color: "#e61e25",
   },
   infoSheetHandleCloseIcon: {
     position: "absolute",

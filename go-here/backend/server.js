@@ -396,7 +396,8 @@ app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) =>
         title: washroomData.title,
         address: washroomData.address,
         longitude: washroomData.longitude,
-        latitude: washroomData.latitude
+        latitude: washroomData.latitude,
+        sponsorlvl: 0
       });
       res.json({
         response: "Washroom added succesfully.",
