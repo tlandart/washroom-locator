@@ -37,6 +37,12 @@ export default function SettingsScreen() {
       <TouchableOpacity style={styles.button}>
         <Text>Version</Text>
       </TouchableOpacity>
+
+      <Text style={styles.title}>FEEDBACK</Text>
+      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <TouchableOpacity style={styles.button}>
+        <Link href="/feedback-form/">Provide Feedback</Link>
+      </TouchableOpacity>
     </View>
   );
 }

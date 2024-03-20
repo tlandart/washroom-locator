@@ -34,6 +34,7 @@ app.use(cors());
 const COLLECTIONS = {
     washrooms: "washrooms",
     users: "users",
+    feedback: "feedback",
     requested: "requested",
     sponsors: "sponsors"
   };
@@ -316,6 +317,22 @@ app.patch("/patchUser/:userId", express.json(), async (req, res) => {
     res.json({ response: `Document with ID ${userId} patched.` });
   } catch (error) {
     res.status(500).json({error: error.message})
+  }
+});
+
+app.post("/postFeedback", express.json(), async (req, res) => {
+  try {
+    const { feedback } = req.body;
+
+    if (!feedback) {
+      return res.status(400).json({ error: "A non-empty feedback is required" });
+    }
+
+    const collection = db.collection(COLLECTIONS.feedback);
+    const result = await collection.insertOne({feedback, dateAdded: new Date()});
+    res.json({response: "Feedback added succesfully.", insertedId: result.insertedId});
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
