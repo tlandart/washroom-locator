@@ -8,6 +8,7 @@ import BottomSheet, {
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ExploreEntry from "../explore-entry";
+import NewWashroomButton from "@/components/NewWashroomButton";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function TabOneScreen() {
