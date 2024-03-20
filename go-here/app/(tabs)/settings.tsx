@@ -18,7 +18,6 @@ export default function SettingsScreen() {
     const correctUsername = 'admin';
     const correctPassword = '12345';
     if (username === correctUsername && password === correctPassword) {
-      alert('Login confirmed');
       navigation.navigate('admin');
     } else {
       alert('Incorrect username or password');
