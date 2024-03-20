@@ -5,6 +5,7 @@ import BottomSheet, { TouchableOpacity } from "@gorhom/bottom-sheet";
 import { SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ExploreEntry from "../explore-entry";
+import NewWashroomButton from "@/components/NewWashroomButton";
 
 export default function TabOneScreen() {
   const [loading, setLoading] = useState(true);
@@ -81,6 +82,7 @@ export default function TabOneScreen() {
               )})}
           </MapView>
           <BottomSheet snapPoints={snapPoints}>
+            <NewWashroomButton/>
             <View style={styles.sheetTop}>
               <View style={styles.separator} />
             </View>
