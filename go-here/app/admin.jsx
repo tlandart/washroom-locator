@@ -1,0 +1,96 @@
+import { StyleSheet, View, Text } from 'react-native';
+import { Link } from 'expo-router';
+
+export default function TabAdminScreen() {
+  const [requests, setRequests] = useState([]);
+
+  useEffect(() => {
+      fetchRequestedCollections();
+  }, []);
+
+  const fetchRequestedCollections = async () => {
+      try {
+          const response = await fetch('https://wide-files-behave.loca.lt/getAllRequested');
+          const data = await response.json();
+          setRequests(data.response);
+      } catch (error) {
+          console.error('Error fetching requested collections:', error);
+      }
+  };
+
+  const handleAccept = async (requestId) => {
+      try {
+          await fetch(`https://wide-files-behave.loca.lt/patchRequestStatus/${requestId}`, {
+              method: 'PATCH',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ status: 'ACCEPTED' }),
+          });
+          fetchRequestedCollections();
+      } catch (error) {
+          console.error('Error accepting request:', error);
+      }
+  };
+
+  const handleDecline = async (requestId) => {
+      try {
+          await fetch(`https://wide-files-behave.loca.lt/patchRequestStatus/${requestId}`, {
+              method: 'PATCH',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ status: 'DECLINED' }),
+          });
+          fetchRequestedCollections();
+      } catch (error) {
+          console.error('Error declining request:', error);
+      }
+  };
+
+  return (
+      <View style={styles.container}>
+          {requests.map((request) => (
+              <View key={request._id} style={styles.requestItem}>
+                  <Text>{request.title}</Text>
+                  <Text>{request.address}</Text>
+                  <TouchableOpacity onPress={() => handleAccept(request._id)}>
+                      <Text style={styles.acceptButton}>Accept</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => handleDecline(request._id)}>
+                      <Text style={styles.declineButton}>Decline</Text>
+                  </TouchableOpacity>
+              </View>
+          ))}
+      </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 30,
+  },
+  requestItem: {
+    marginBottom: 10,
+},
+acceptButton: {
+    backgroundColor: 'green',
+    color: 'white',
+    padding: 5,
+    borderRadius: 5,
+    marginTop: 5,
+},
+declineButton: {
+    backgroundColor: 'red',
+    color: 'white',
+    padding: 5,
+    borderRadius: 5,
+    marginTop: 5,
+},
+});
