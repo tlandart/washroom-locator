@@ -40,6 +40,9 @@ const ExploreEntry = ({
       <View style={{ padding: 15 }}>
         <Text style={styles.titleText}>{title}</Text>
         <Text style={styles.text}>{address}</Text>
+        <Text style={styles.text}>
+          {longitude}, {latitude}
+        </Text>
       </View>
     </View>
   );
