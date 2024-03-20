@@ -52,7 +52,7 @@ export default function TabOneScreen() {
          * This allows the expo app to access the server (it can't access localhost).
          * Ensure that the phone and computer are ON THE SAME NETWORK.
          */
-        await fetch("https://shy-forks-film.loca.lt/getAllWashrooms").then(
+        await fetch("https://dry-moles-hope.loca.lt/getAllWashrooms").then(
           async (response) => {
             if (!response.ok) {
               alert("Server failed: " + response.status);
@@ -71,7 +71,7 @@ export default function TabOneScreen() {
     };
 
     getWashrooms();
-    // infoCloseHandler();
+    infoCloseHandler();
   }, []);
 
   const mapRef = useRef<MapView>(null);
@@ -121,6 +121,7 @@ export default function TabOneScreen() {
                   latitude: JSON.parse(JSON.stringify(d)).latitude,
                   longitude: JSON.parse(JSON.stringify(d)).longitude,
                 }}
+                onPress={() => menuClickHandler(idx)}
               >
                 <Image
                   source={require("../../assets/images/gohere-pin.png")}
@@ -154,6 +155,7 @@ export default function TabOneScreen() {
                       address={JSON.parse(JSON.stringify(d)).address}
                       latitude={JSON.parse(JSON.stringify(d)).latitude}
                       longitude={JSON.parse(JSON.stringify(d)).longitude}
+                      sponsorlvl={JSON.parse(JSON.stringify(d)).sponsorlvl}
                     />
                   </TouchableOpacity>
                 );
