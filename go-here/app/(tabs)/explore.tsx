@@ -172,6 +172,7 @@ export default function TabOneScreen() {
               />
             )}
           </BottomSheetScrollView>
+          <NewWashroomButton/>
         </BottomSheet>
         {/* Info Sheet. */}
         <BottomSheet

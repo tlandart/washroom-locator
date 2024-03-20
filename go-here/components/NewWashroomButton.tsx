@@ -9,7 +9,7 @@ interface FormData {
     latitude: string;
 }
 
-const CancelButton = ({ onCancel }) => {
+const CancelButton = ({ onCancel } : { onCancel: any }) => {
     return (
         <Button
             title="Cancel"
@@ -19,6 +19,8 @@ const CancelButton = ({ onCancel }) => {
 };
 
 const NewWashroomButton = () => {
+    const devLink = "https://eighty-zoos-enjoy.loca.lt";
+
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState<FormData>({
         title: '',
@@ -40,10 +42,10 @@ const NewWashroomButton = () => {
          * This allows the expo app to access the server (it can't acces localhost).
          * Ensure that the phone and computer are ON THE SAME NETWORK.
          */
-        /* Had some trouble setting up server so for now this is commented out. 
+        /* Had some trouble setting up server so for now this is commented out. */
 
         try {
-            const response = await fetch('/postWashroomRequest', {
+            const response = await fetch(devLink + '/postWashroomRequest', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -53,6 +55,9 @@ const NewWashroomButton = () => {
 
             if (!response.ok) {
                 throw new Error('Failed to submit form data');
+            }
+            else {
+                alert ("Thank you for submitting a washroom!");
             }
 
             const data = await response.json();
@@ -65,9 +70,9 @@ const NewWashroomButton = () => {
                 latitude: '',
             });
         } catch (error) {
-            console.error('Error submitting form', String(error));
+            alert('Error submitting form: ' + error);
         }
-        */
+        
 
         setFormData({
             title: '',
@@ -134,6 +139,7 @@ const NewWashroomButton = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 0,
