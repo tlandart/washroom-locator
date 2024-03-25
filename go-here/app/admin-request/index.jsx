@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 export default function TabAdminScreen() {
-  const devLink = "https://few-spoons-beg.loca.lt";
+  const devLink = "https://young-corners-battle.loca.lt";
 
   const [requests, setRequests] = useState([]);
 

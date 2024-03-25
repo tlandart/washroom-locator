@@ -1,5 +1,4 @@
 import { StyleSheet, Text, TextInput, Button, TouchableOpacity, Pressable } from 'react-native';
-import EditScreenInfo from '@/components/EditScreenInfo';
 import React, { useState } from 'react';
 import { View } from '@/components/Themed';
 import { Link } from "expo-router";
@@ -18,7 +17,7 @@ export default function SettingsScreen() {
     const correctUsername = 'admin';
     const correctPassword = '12345';
     if (username === correctUsername && password === correctPassword) {
-      navigation.navigate('admin');
+      navigation.navigate('adminHome');
     } else {
       alert('Incorrect username or password');
     }
@@ -61,8 +60,7 @@ export default function SettingsScreen() {
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <TouchableOpacity style={styles.button}>
         <Link href="/feedback-form/">Provide Feedback</Link>
-      </TouchableOpacity>
-      
+      </TouchableOpacity> 
 
       <Text style={styles.title}>Admin</Text>
       {showLogin ? (
