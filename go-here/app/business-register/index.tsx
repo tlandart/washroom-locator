@@ -1,0 +1,123 @@
+import {
+  StyleSheet,
+  View,
+  Text,
+  Button,
+  TextInput,
+  Modal,
+  TouchableOpacity,
+} from "react-native";
+import React, { useState, useEffect } from "react";
+
+export default function FeedbackForm() {
+  const devLink = "https://cuddly-areas-serve.loca.lt";
+  const [register, setRegister] = useState("");
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [errorMessageText, setErrorMessageText] = useState("");
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+  async function submitRegister() {
+    try {
+      if (register == "") {
+        setErrorMessageText("Can't submit an empty form");
+        setShowErrorMessage(true);
+        return;
+      }
+      /* For dev testing:
+       * Get this link by running "npx localtunnel --port 4000" in the /backend/ directory AFTER starting the MongoDB server.
+       * This allows the expo app to access the server (it can't acces localhost).
+       * Ensure that the phone and computer are ON THE SAME NETWORK.
+       */
+      // await fetch(devLink + "/postFeedback", {
+      // }).then(async (response) => {
+      // });
+    } catch (error) {
+      console.log("Fetch function failed:", error);
+      setErrorMessageText("Fetch function failed:" + error);
+      setShowErrorMessage(true);
+    }
+  }
+
+  //Change TouchableOpacity to use Pressable
+  return (
+    <View style={styles.container}>
+      {!showSuccessMessage ? (
+        <View style={styles.feedbackForm}>
+          <Text style={styles.title}>New Business Register Form</Text>
+          <View style={styles.main}>
+            <Text style={styles.label}>Register</Text>
+            <TextInput
+              style={styles.input}
+              value={register}
+              onChangeText={(newValue) => setRegister(newValue)}
+              placeholder="Enter title here"
+              placeholderTextColor={"grey"}
+              multiline={true}
+              numberOfLines={1}
+            />
+            <View style={styles.buttonContainer}>
+              <Button
+                title="Save"
+                color="grey"
+                onPress={submitRegister}
+              ></Button>
+            </View>
+            {showErrorMessage && (
+              <Text style={styles.errorMessage}>{errorMessageText}</Text>
+            )}
+          </View>
+        </View>
+      ) : (
+        <Text style={styles.successMessage}>
+          Successfully submitted. Thank you for providing feedback!
+        </Text>
+      )}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  main: {
+    width: "50%",
+  },
+  feedbackForm: {
+    width: "100%",
+    flex: 1,
+    alignItems: "center",
+  },
+  button: {
+    marginTop: 10,
+    marginBottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+  },
+  buttonContainer: {
+    marginTop: 18,
+    borderColor: "grey",
+    borderWidth: 1,
+  },
+  container: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: "white",
+  },
+  input: {
+    marginTop: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: "black",
+  },
+  title: {
+    marginTop: 20,
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  label: {
+    marginTop: 30,
+  },
+  errorMessage: {
+    marginTop: 30,
+    color: "red",
+  },
+  successMessage: {
+    marginTop: 30,
+  },
+});
