@@ -399,29 +399,38 @@ app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) =>
 
     if(status === "ACCEPTED"){
       const washroomData = await requestCollection.findOne(new ObjectId(washroomId));
-      const newWashroomData = await washroomCollection.insertOne({
-        title: washroomData.title,
-        address: washroomData.address,
-        longitude: washroomData.longitude,
-        latitude: washroomData.latitude,
-        sponsorlvl: 0,
-        requestType: requestData.requestType
-      });
-      res.json({
-        response: "Washroom added succesfully.",
-        insertedId: newWashroomData.insertedId,
-      }); 
-      const requestData = await requestCollection.deleteOne({
-        _id: new ObjectId(washroomId),
-      });
 
-      if (newWashroomData.matchedCount === 0 || washroomData.matchedCount === 0) {
+      if (!washroomData) {
+        return res.status(404).json({error: "Requested washroom not found."});
+      }
+
+      if (washroomData.requestType === "USERCLOSURE") {
+        const deletedWashroom = await washroomCollection.deleteOne({ _id: new ObjectId(washroomId) })
+      } else {
+        const newWashroomData = await washroomCollection.insertOne({
+          title: washroomData.title,
+          address: washroomData.address,
+          longitude: washroomData.longitude,
+          latitude: washroomData.latitude,
+          sponsorlvl: 0,
+          requestType: washroomData.requestType
+        });
+        res.json({
+          response: "Washroom added succesfully.",
+          insertedId: newWashroomData.insertedId,
+        }); 
+        const requestData = await requestCollection.deleteOne({
+          _id: new ObjectId(washroomId),
+        });
+  
+        if (newWashroomData.matchedCount === 0 || washroomData.matchedCount === 0) {
+          return res
+            .status(404)
+            .json({ error: "Unable to find accepted washroom with given ID." });
+        } 
+        
         return res
-          .status(404)
-          .json({ error: "Unable to find accepted washroom with given ID." });
-      } 
-      
-      return res
+      }
     } else if (status === "DECLINED"){
       const requestData = await requestCollection.deleteOne({
         _id: new ObjectId(washroomId),
