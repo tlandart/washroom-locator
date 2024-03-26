@@ -348,12 +348,18 @@ app.get("/getAllRequested", express.json(), async (req, res) => {
 
 app.post("/postWashroomRequest", express.json(), async (req, res) => {
   try {
-    const { title, address, longitude, latitude } = req.body;
+    const { title, address, longitude, latitude, requestType } = req.body;
 
-    if (!title || !address || !longitude || !latitude) {
+    if (!title || !address || !longitude || !latitude || !requestType) {
       return res
         .status(400)
-        .json({ error: "Title, Address, Longitude, and Latitude are required." });
+        .json({ error: "Title, Address, Longitude, and Latitude and Request Type are required." });
+    }
+
+    if (!['', '', ''].includes(requestType.toUpperCase())) {
+      return res
+        .status(400)
+        .json({ error: "Invalid request type. It must be USERREQUEST, USERCLOSURE, or BUSINESSREQUEST." });
     }
 
     const collection = db.collection(COLLECTIONS.requested);
@@ -361,7 +367,8 @@ app.post("/postWashroomRequest", express.json(), async (req, res) => {
       title,
       address,
       longitude,
-      latitude
+      latitude,
+      requestType: requestType.toUpperCase()
     });
     res.json({
       response: "Washroom request added succesfully.",
@@ -397,7 +404,8 @@ app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) =>
         address: washroomData.address,
         longitude: washroomData.longitude,
         latitude: washroomData.latitude,
-        sponsorlvl: 0
+        sponsorlvl: 0,
+        requestType: requestData.requestType
       });
       res.json({
         response: "Washroom added succesfully.",
