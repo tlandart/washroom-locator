@@ -356,7 +356,7 @@ app.post("/postWashroomRequest", express.json(), async (req, res) => {
         .json({ error: "Title, Address, Longitude, and Latitude and Request Type are required." });
     }
 
-    if (!['', '', ''].includes(requestType.toUpperCase())) {
+    if (!['USERREQUEST', 'USERCLOSURE', 'BUSINESSREQUEST'].includes(requestType.toUpperCase())) {
       return res
         .status(400)
         .json({ error: "Invalid request type. It must be USERREQUEST, USERCLOSURE, or BUSINESSREQUEST." });
