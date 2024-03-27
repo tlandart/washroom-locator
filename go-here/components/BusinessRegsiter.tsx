@@ -1,5 +1,4 @@
-import { Link } from 'expo-router';
-import { View, Button, Linking, StyleSheet} from 'react-native';
+import { View, Button} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const BusinessRegisterButton = () => {

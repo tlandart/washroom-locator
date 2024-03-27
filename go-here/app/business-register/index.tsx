@@ -4,22 +4,34 @@ import {
   Text,
   Button,
   TextInput,
-  Modal,
-  TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
+import { useNavigation } from "expo-router";
 
-export default function FeedbackForm() {
-  const devLink = "https://cuddly-areas-serve.loca.lt";
-  const [register, setRegister] = useState("");
+export default function BusinessRegisterForm() {
+  const devLink = "https://stupid-nails-tap.loca.lt";
+  const [title, setTitle] = useState("");
+  const [address, setAddress] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState("");
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const navigation = useNavigation();
+  
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'New Business Register',
+      headerBackTitle: 'Back'
+    })
+  }, []);
 
   async function submitRegister() {
     try {
-      if (register == "") {
-        setErrorMessageText("Can't submit an empty form");
+      if (title == "" || address == "" || latitude == "" || longitude == "" || phone == "" || email == ""){
+        setErrorMessageText("Please provide a title, address, latitude, longitude, phone, and email.");
         setShowErrorMessage(true);
         return;
       }
@@ -28,9 +40,24 @@ export default function FeedbackForm() {
        * This allows the expo app to access the server (it can't acces localhost).
        * Ensure that the phone and computer are ON THE SAME NETWORK.
        */
-      // await fetch(devLink + "/postFeedback", {
-      // }).then(async (response) => {
-      // });
+      await fetch(devLink + "/postWashroomRequest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, address, latitude, longitude, requestType: "BUSINESSREQUEST" }),
+      }).then(async (response) => {
+        if (!response.ok) {
+          console.log("Business Register Form submission failed:", response.status);
+          setErrorMessageText(
+            "Business Register Form submission failed: " + response.status
+          );
+          setShowErrorMessage(true);
+        } else {
+          await response.json().then((data) => {
+            setShowSuccessMessage(true);
+          });
+        }
+      }).then(async (response) => {
+      });
     } catch (error) {
       console.log("Fetch function failed:", error);
       setErrorMessageText("Fetch function failed:" + error);
@@ -38,19 +65,63 @@ export default function FeedbackForm() {
     }
   }
 
-  //Change TouchableOpacity to use Pressable
   return (
     <View style={styles.container}>
       {!showSuccessMessage ? (
-        <View style={styles.feedbackForm}>
+        <View style={styles.registerForm}>
           <Text style={styles.title}>New Business Register Form</Text>
           <View style={styles.main}>
             <Text style={styles.label}>Register</Text>
             <TextInput
               style={styles.input}
-              value={register}
-              onChangeText={(newValue) => setRegister(newValue)}
+              value={title}
+              onChangeText={(newValue) => setTitle(newValue)}
               placeholder="Enter title here"
+              placeholderTextColor={"grey"}
+              multiline={true}
+              numberOfLines={1}
+            />
+            <TextInput
+              style={styles.input}
+              value={address}
+              onChangeText={(newValue) => setAddress(newValue)}
+              placeholder="Enter address here"
+              placeholderTextColor={"grey"}
+              multiline={true}
+              numberOfLines={1}
+            />
+            <TextInput
+              style={styles.input}
+              value={latitude}
+              onChangeText={(newValue) => setLatitude(newValue)}
+              placeholder="Enter latitude here"
+              placeholderTextColor={"grey"}
+              multiline={true}
+              numberOfLines={1}
+            />
+            <TextInput
+              style={styles.input}
+              value={longitude}
+              onChangeText={(newValue) => setLongitude(newValue)}
+              placeholder="Enter longitude here"
+              placeholderTextColor={"grey"}
+              multiline={true}
+              numberOfLines={1}
+            />
+            <TextInput
+              style={styles.input}
+              value={phone}
+              onChangeText={(newValue) => setPhone(newValue)}
+              placeholder="Enter phone here"
+              placeholderTextColor={"grey"}
+              multiline={true}
+              numberOfLines={1}
+            />
+            <TextInput
+              style={styles.input}
+              value={email}
+              onChangeText={(newValue) => setEmail(newValue)}
+              placeholder="Enter email here"
               placeholderTextColor={"grey"}
               multiline={true}
               numberOfLines={1}
@@ -69,7 +140,7 @@ export default function FeedbackForm() {
         </View>
       ) : (
         <Text style={styles.successMessage}>
-          Successfully submitted. Thank you for providing feedback!
+          Successfully submitted. Thank you for registering your business!
         </Text>
       )}
     </View>
@@ -80,7 +151,7 @@ const styles = StyleSheet.create({
   main: {
     width: "50%",
   },
-  feedbackForm: {
+  registerForm: {
     width: "100%",
     flex: 1,
     alignItems: "center",
