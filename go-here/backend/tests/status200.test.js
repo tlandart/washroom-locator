@@ -213,6 +213,7 @@ test("/postSponsor - Post a sponsor", async () => {
     const address = "Test Address";
     const longitude = 123.456;
     const latitude = 78.910;
+    const requestType = "USERREQUEST"; // Change according to your requirements
   
     const postWashroomRequestRes = await fetch(`${SERVER_URL}/postWashroomRequest`, {
       method: "POST",
@@ -224,6 +225,7 @@ test("/postSponsor - Post a sponsor", async () => {
         address: address,
         longitude: longitude,
         latitude: latitude,
+        requestType: requestType,
       }),
     });
   
@@ -235,7 +237,7 @@ test("/postSponsor - Post a sponsor", async () => {
   
   test("/patchRequestStatus/:washroomId - Patch request status", async () => {
     const washroomId = "123456789012345678901234"; // Replace with a valid washroom request ID
-    const status = "ACCEPTED";
+    const status = "ACCEPTED"; // Change according to your requirements
   
     const patchRequestStatusRes = await fetch(`${SERVER_URL}/patchRequestStatus/${washroomId}`, {
       method: "PATCH",
@@ -252,3 +254,4 @@ test("/postSponsor - Post a sponsor", async () => {
     expect(patchRequestStatusRes.status).toBe(200);
     expect(patchRequestStatusBody.response).toBeDefined(); // Assuming response contains patched document message
   });
+
