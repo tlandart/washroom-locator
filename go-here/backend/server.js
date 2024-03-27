@@ -203,7 +203,7 @@ app.patch("/patchWashroom/:washroomId", express.json(), async (req, res) => {
     }
 
     const { title, address, longitude, latitude, sponsorlvl } = req.body;
-    if (!title && !address && !longitude && !latitude && sponsorlvl == null) {
+    if (!title || !address || !longitude || !latitude || sponsorlvl == null) {
       return res
         .status(400)
         .json({ error: "Must have at least one of title, address, longitude, latitude, or sponsorlvl." });
