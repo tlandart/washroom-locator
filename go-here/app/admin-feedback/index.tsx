@@ -1,11 +1,9 @@
 import { StyleSheet, Text, TextInput, Button, TouchableOpacity, Pressable, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { View } from '@/components/Themed';
+import { devLink } from '@/constants/DevLink';
 
 export default function AdminFeedback() {
-
-  const devLink = "https://tired-pianos-tease.loca.lt";
-
   type FeedbackType = {
     _id: "string";
     feedbackTitle: "string";

@@ -8,10 +8,9 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
+import { devLink } from "@/constants/DevLink";
 
 export default function FeedbackForm() {
-  const devLink = "https://tired-pianos-tease.loca.lt";
-
   const [feedbackTitle, setFeedbackTitle] = useState("");
   const [feedbackDescription, setFeedbackDescription] = useState("");
   const [showErrorMessage, setShowErrorMessage] = useState(false);
