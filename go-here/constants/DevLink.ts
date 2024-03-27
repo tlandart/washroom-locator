@@ -1,0 +1,1 @@
+export const devLink = "https://rich-grapes-suffer.loca.lt";
