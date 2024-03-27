@@ -17,55 +17,6 @@ describe('notes', () => {
     await connection.close();
   });
 
-// const fakeData = {
-//   washrooms: [
-//     {
-//       id: uuidv4(),
-//       title: "Washroom 1",
-//       address: "123 Main St",
-//       longitude: -73.987,
-//       latitude: 40.748,
-//       sponsorlvl: 1
-//     }
-//     // Add more washrooms as needed
-//   ],
-//   users: [
-//     {
-//       id: uuidv4(),
-//       firstName: "John",
-//       lastName: "Doe",
-//       healthCondition: "Healthy"
-//     }
-//     // Add more users as needed
-//   ],
-//   feedback: [
-//     {
-//       id: uuidv4(),
-//       feedback: "Test feedback 1"
-//     }
-//     // Add more feedbacks as needed
-//   ],
-//   requested: [
-//     {
-//       id: uuidv4(),
-//       title: "Requested Washroom 1",
-//       address: "456 Elm St",
-//       longitude: -74.123,
-//       latitude: 41.234,
-//       requestType: "REQUESTED"
-//     }
-//     // Add more requested washrooms as needed
-//   ],
-//   sponsors: [
-//     {
-//       id: uuidv4(),
-//       title: "Sponsor 1",
-//       sponsorlvl: 2
-//     }
-//     // Add more sponsors as needed
-//   ]
-// };
-
 test("/postSponsor - Post a sponsor", async () => {
   const title = "SponsorTitleTest";
   const sponsorlvl = 2;
@@ -206,6 +157,9 @@ test("/patchWashroom/:washroomId - Patch washroom by ID", async () => {
     },
     body: JSON.stringify({
       title: "Updated Washroom",
+      address: "Updated address",
+      latitude: 5,
+      longitude: -5,
       sponsorlvl: 2,
     }),
   });
