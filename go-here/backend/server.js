@@ -331,7 +331,6 @@ app.get("/getAllFeedback", express.json(), async (req, res) => {
 });
 
 app.post("/postFeedback", express.json(), async (req, res) => {
-  console.log("HI");
   try {
     const { feedbackTitle, feedbackDescription } = req.body;
 
