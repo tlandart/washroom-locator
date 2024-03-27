@@ -11,7 +11,7 @@ const ExploreEntry = ({
       <View style={styles.container2}>
         <View style={styles.container3}>
           <Text style={styles.title}>{entry.title}</Text>
-          <Text style={styles.subtitle}>{`${entry.day} ${entry.month}, ${entry.year}`}</Text>
+          <Text style={styles.subtitle}>{`${entry.month}/${entry.day}/${entry.year}`}</Text>
         </View>
         <View style={styles.separator} />
         <Text style={styles.description}>{entry.description.length > MAX_LENGTH ? entry.description.substring(0, MAX_LENGTH) + "..." : entry.description}</Text>
