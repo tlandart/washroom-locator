@@ -115,7 +115,7 @@ export default function TabOneScreen() {
           showsUserLocation={true}
           showsMyLocationButton={true}
         >
-          {locations.map(function (d, idx) {
+          {locations.map((d, idx) => {
             const sl = JSON.parse(JSON.stringify(d)).sponsorlvl;
             const path =
               sl <= 0
@@ -156,7 +156,7 @@ export default function TabOneScreen() {
           </View>
           <BottomSheetScrollView>
             {!loading &&
-              locations.map(function (d: any, idx: number) {
+              locations.map((d: any, idx: number) => {
                 return (
                   <TouchableOpacity
                     key={idx}
