@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
+import { useNavigation } from "expo-router";
 
 export default function FeedbackForm() {
   const devLink = "https://eighty-zoos-enjoy.loca.lt";
@@ -17,6 +18,15 @@ export default function FeedbackForm() {
   const [errorMessageText, setErrorMessageText] = useState("");
 
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Feedback Page',
+      headerBackTitle: 'Back'
+    })
+  }, []);
 
   async function submitFeedback() {
     try {

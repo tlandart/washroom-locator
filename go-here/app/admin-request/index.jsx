@@ -6,14 +6,20 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import { useNavigation } from "expo-router";
 
 export default function TabAdminScreen() {
   const devLink = "https://young-corners-battle.loca.lt";
 
   const [requests, setRequests] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetchRequestedCollections();
+    navigation.setOptions({
+      title: 'Admin Requests Page',
+      headerBackTitle: 'Back'
+    })
   }, []);
 
   const fetchRequestedCollections = async () => {
