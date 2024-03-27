@@ -33,7 +33,7 @@ jobs:
             mongodb-version: 7.0.5
             mongodb-db: --dbpath=./data/db
                   
-        - run: cd ./go-here/backend/
+        - working-directory: ./go-here/backend
         - run: npm i
         - run: npm start &
         - run: npm test
