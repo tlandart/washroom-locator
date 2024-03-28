@@ -6,13 +6,19 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import { useNavigation } from "expo-router";
 import { devLink } from "@/constants/DevLink";
 
 export default function TabAdminScreen() {
   const [requests, setRequests] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetchRequestedCollections();
+    navigation.setOptions({
+      title: 'Admin Requests Page',
+      headerBackTitle: 'Back'
+    })
   }, []);
 
   const fetchRequestedCollections = async () => {

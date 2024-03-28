@@ -1,7 +1,8 @@
-import { StyleSheet, Text, TextInput, Button, TouchableOpacity, Pressable, ScrollView } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, Pressable, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { View } from '@/components/Themed';
 import { devLink } from '@/constants/DevLink';
+import { useNavigation } from 'expo-router';
 
 export default function AdminFeedback() {
   type FeedbackType = {
@@ -10,9 +11,14 @@ export default function AdminFeedback() {
     feedbackDescription: "string";
   }
   const [feedback, setFeedback] = useState<FeedbackType[]>([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetchRequestedCollections();
+    navigation.setOptions({
+      title: 'Admin Feedback Page',
+      headerBackTitle: 'Back'
+    })
   }, []);
 
   const fetchRequestedCollections = async () => {

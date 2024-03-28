@@ -7,7 +7,8 @@ import {
   Modal,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigation } from "expo-router";
 import { devLink } from "@/constants/DevLink";
 
 export default function FeedbackForm() {
@@ -17,6 +18,15 @@ export default function FeedbackForm() {
   const [errorMessageText, setErrorMessageText] = useState("");
 
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Feedback Page',
+      headerBackTitle: 'Back'
+    })
+  }, []);
 
   async function submitFeedback() {
     try {
