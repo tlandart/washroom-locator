@@ -16,8 +16,7 @@ export default function MyProfile() {
       headerBackTitle: 'Back'
     })
   }, []);
-  //Use AsyncStorage to save user data?
-  //Change TouchableOpacity to use Pressable
+
   return (
     <View style={styles.container}>
       <View style={styles.main}>

@@ -1,12 +1,4 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  Button,
-  TextInput,
-  Modal,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, View, Text, Button, TextInput } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "expo-router";
 import { devLink } from "@/constants/DevLink";
@@ -36,11 +28,6 @@ export default function FeedbackForm() {
         return;
       }
 
-      /* For dev testing:
-       * Get this link by running "npx localtunnel --port 4000" in the /backend/ directory AFTER starting the MongoDB server.
-       * This allows the expo app to access the server (it can't acces localhost).
-       * Ensure that the phone and computer are ON THE SAME NETWORK.
-       */
       await fetch(devLink + "/postFeedback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -65,7 +52,6 @@ export default function FeedbackForm() {
     }
   }
 
-  //Change TouchableOpacity to use Pressable
   return (
     <View style={styles.container}>
       {!showSuccessMessage ? (

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, Button, TouchableOpacity, Pressable } from 'react-native';
+import { StyleSheet, Text, TextInput, Button, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { View } from '@/components/Themed';
 import { Link } from "expo-router";
@@ -23,7 +23,6 @@ export default function SettingsScreen() {
     }
   };
 
-  //Change TouchableOpacity to use Pressable
   return (
     <View style={styles.container}>
       <Text style={styles.title}>MY PROFILE</Text>

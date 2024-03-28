@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, Pressable, ScrollView } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { View } from '@/components/Themed';
 import { devLink } from '@/constants/DevLink';

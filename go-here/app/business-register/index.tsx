@@ -36,11 +36,7 @@ export default function BusinessRegisterForm() {
         setShowErrorMessage(true);
         return;
       }
-      /* For dev testing:
-       * Get this link by running "npx localtunnel --port 4000" in the /backend/ directory AFTER starting the MongoDB server.
-       * This allows the expo app to access the server (it can't acces localhost).
-       * Ensure that the phone and computer are ON THE SAME NETWORK.
-       */
+
       await fetch(devLink + "/postWashroomRequest", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
