@@ -34,7 +34,7 @@ export default function FeedbackForm() {
       await fetch(devLink + "/postFeedback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ feedbackTitle, feedbackDescription }),
+        body: JSON.stringify({ feedbackTitle: feedbackTitle, feedbackDescription: feedbackDescription }),
       }).then(async (response) => {
         if (!response.ok) {
           console.log("Feedback Form submission failed:", response.status);

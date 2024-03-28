@@ -336,11 +336,11 @@ app.post("/postFeedback", express.json(), async (req, res) => {
     const { feedbackTitle, feedbackDescription } = req.body;
 
     if (!feedbackTitle && !feedbackDescription) {
-      return res.status(400).json({ error: "A non-empty feedback is required" });
+      return res.status(400).json({ error: "A non-empty feedback is required"});
     }
 
     const collection = db.collection(COLLECTIONS.feedback);
-    const result = await collection.insertOne({feedbackTitle, feedbackDescription, dateAdded: new Date()});
+    const result = await collection.insertOne({feedbackTitle: feedbackTitle, feedbackDescription: feedbackDescription, dateAdded: new Date()});
     res.json({response: "Feedback added succesfully.", insertedId: result.insertedId});
   } catch (error) {
     res.status(500).json({ error: error.message });

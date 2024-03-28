@@ -30,13 +30,6 @@ const NewWashroomButton = () => {
   };
 
   const handleSubmit = async () => {
-    /* For dev testing:
-     * Get this link by running "npx localtunnel --port 4000" in the /backend/ directory AFTER starting the MongoDB server.
-     * This allows the expo app to access the server (it can't acces localhost).
-     * Ensure that the phone and computer are ON THE SAME NETWORK.
-     */
-    /* Had some trouble setting up server so for now this is commented out. */
-
     try {
       const response = await fetch(devLink + "/postWashroomRequest", {
         method: "POST",
