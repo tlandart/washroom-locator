@@ -321,21 +321,53 @@ app.patch("/patchUser/:userId", express.json(), async (req, res) => {
   }
 });
 
+app.get("/getAllFeedback", express.json(), async (req, res) => {
+  try {
+      const collection = db.collection(COLLECTIONS.feedback);
+      const data = await collection.find().toArray();
+      res.json({ response: data });
+    } catch (error) {
+      res.status(500).json({error: error.message})
+    }
+});
+
 app.post("/postFeedback", express.json(), async (req, res) => {
   try {
-    const { feedback } = req.body;
+    const { feedbackTitle, feedbackDescription } = req.body;
 
-    if (!feedback) {
+    if (!feedbackTitle && !feedbackDescription) {
       return res.status(400).json({ error: "A non-empty feedback is required" });
     }
 
     const collection = db.collection(COLLECTIONS.feedback);
-    const result = await collection.insertOne({feedback, dateAdded: new Date()});
+    const result = await collection.insertOne({feedbackTitle, feedbackDescription, dateAdded: new Date()});
     res.json({response: "Feedback added succesfully.", insertedId: result.insertedId});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
+app.delete("/deleteFeedback/:entryId", express.json(), async (req, res) => {
+  try {
+    const feedbackId = req.params.entryId;
+    if (!ObjectId.isValid(feedbackId)) {
+      return res.status(400).json({ error: "Invalid feedback ID." });
+    }
+
+    const collection = db.collection(COLLECTIONS.feedback);
+    const data = await collection.deleteOne({
+      _id: new ObjectId(feedbackId)
+    });
+
+    if (data.deletedCount === 0) {
+      return res.status(404).json({ error: "Unable to find feedback with given ID." });
+    }
+    res.json({ response: `Document with ID ${feedbackId} deleted.` });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 app.get("/getAllRequested", express.json(), async (req, res) => {
   try {
