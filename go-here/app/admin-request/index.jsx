@@ -6,10 +6,9 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import { devLink } from "@/constants/DevLink";
 
 export default function TabAdminScreen() {
-  const devLink = "https://young-corners-battle.loca.lt";
-
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
