@@ -60,6 +60,7 @@ export default function TabAdminScreen() {
       <ScrollView>
         {requests.map((request) => (
           <View key={request._id} style={styles.requestItem}>
+            <Text>{request.requestType}</Text>
             <Text>{request.title}</Text>
             <Text>{request.address}</Text>
             <TouchableOpacity onPress={() => handleAccept(request._id)}>
