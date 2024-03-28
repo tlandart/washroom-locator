@@ -229,15 +229,14 @@ test("/patchUser/:userId - Patch user by ID", async () => {
 });
 
 test("/postFeedback - Post feedback", async () => {
-  const feedback = "Test feedback";
-
   const postFeedbackRes = await fetch(`${SERVER_URL}/postFeedback`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      feedback: feedback,
+      feedbackTitle: "Test title",
+      feedbackDescription: "Test feedback",
     }),
   });
 
