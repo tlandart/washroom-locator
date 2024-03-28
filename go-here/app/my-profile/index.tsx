@@ -1,5 +1,6 @@
 import { StyleSheet, View, Text, Button, TextInput, Modal, TouchableOpacity} from 'react-native';
 import React, { useState, useEffect } from 'react';
+import { useNavigation } from 'expo-router';
 
 export default function MyProfile() {
   const [firstName, setFirstName] = useState("");
@@ -7,7 +8,14 @@ export default function MyProfile() {
   const [healthCondition, setHealthCondition] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const options = ["Crohn's disease", "Ulcerative colitis"];
+  const navigation = useNavigation();
 
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'My Profile',
+      headerBackTitle: 'Back'
+    })
+  }, []);
   //Use AsyncStorage to save user data?
   //Change TouchableOpacity to use Pressable
   return (
