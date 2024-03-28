@@ -7,6 +7,7 @@ interface FormData {
   address: string;
   longitude: string;
   latitude: string;
+  requestType: string;
 }
 
 const CancelButton = ({ onCancel }: { onCancel: any }) => {
@@ -20,6 +21,7 @@ const NewWashroomButton = () => {
     address: "",
     longitude: "",
     latitude: "",
+    requestType: "USERREQUEST"
   });
 
   const handleInputChange = (name: keyof FormData, value: string) => {
@@ -53,6 +55,7 @@ const NewWashroomButton = () => {
         address: "",
         longitude: "",
         latitude: "",
+        requestType: "USERREQUEST"
       });
     } catch (error) {
       alert("Error submitting form: " + error);
@@ -63,6 +66,7 @@ const NewWashroomButton = () => {
       address: "",
       longitude: "",
       latitude: "",
+      requestType: "USERREQUEST"
     });
   };
 
@@ -72,6 +76,7 @@ const NewWashroomButton = () => {
       address: "",
       longitude: "",
       latitude: "",
+      requestType: "USERREQUEST"
     });
     setShowForm(false);
   };
