@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react';
 import NewsEntry from '../../components/NewsEntry';
 import { GestureHandlerRootView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
+import { devLink } from "../../constants/DevLink"
 
 export default function TabNewsScreen() {
-  const devLink = "https://forty-mugs-trade.loca.lt";
+  const [loading, setLoading] = useState(true);
   const [entries, setEntries] = useState<any[]>([]);
+  const [selectedEntry, setSelectedEntry] = useState(-1);
 
   useEffect(() => {
     const getEntries = async () => {
@@ -23,13 +25,13 @@ export default function TabNewsScreen() {
         });
       } catch (error) {
         alert("Fetch function failed: " + error);
+      } finally {
+        setLoading(false);
       }
     };
 
     getEntries();
   }, []);
-  
-  const [selectedEntry, setSelectedEntry] = useState(-1);
 
   return (
       <ScrollView style={styles.container}>
@@ -57,13 +59,15 @@ export default function TabNewsScreen() {
           </View>
         </Modal>
         <GestureHandlerRootView>
-          {entries.map((d: any, idx: number) => {
-            return (
-              <TouchableOpacity key={idx} onPress={() => setSelectedEntry(idx)}>
-                <NewsEntry entry={d}/>
-              </TouchableOpacity>
-            );
-          })}
+          {loading ? 
+            <NewsEntry entry={{title: "Loading...", description: "N/A", day: 1, month: 1, year: 1970}}/>
+            : entries.map((d: any, idx: number) => {
+              return (
+                <TouchableOpacity key={idx} onPress={() => setSelectedEntry(idx)}>
+                  <NewsEntry entry={d}/>
+                </TouchableOpacity>
+              );
+            })}
         </GestureHandlerRootView>
       </ScrollView>
   );

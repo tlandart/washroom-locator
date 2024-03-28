@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, TextInput, View, StyleSheet } from "react-native";
+import { devLink } from "@/constants/DevLink";
 
 interface FormData {
   title: string;
@@ -7,8 +8,6 @@ interface FormData {
 }
 
 const AdminNews = () => {
-  const devLink = "https://forty-mugs-trade.loca.lt";
-
   const [formData, setFormData] = useState<FormData>({
     title: "",
     description: "",

@@ -11,10 +11,9 @@ import ExploreEntry from "../../components/ExploreEntry";
 import NewWashroomButton from "@/components/NewWashroomButton";
 import { Ionicons } from "@expo/vector-icons";
 import ExploreInfo from "../../components/ExploreInfo";
+import { devLink } from "../../constants/DevLink"
 
 export default function TabOneScreen() {
-  const devLink = "https://few-spoons-beg.loca.lt";
-
   const [loading, setLoading] = useState(true);
   const [locations, setLocations] = useState<any[]>([]);
   const [selectedLocation, setSelectedLocation] = useState(-1);

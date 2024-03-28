@@ -1,1 +1,1 @@
-export const devLink = "https://tricky-trains-begin.loca.lt";
+export const devLink = "https://forty-mugs-trade.loca.lt";
