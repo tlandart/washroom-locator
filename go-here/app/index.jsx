@@ -1,7 +1,17 @@
 import { StyleSheet, View, Text } from 'react-native';
-import { Link } from 'expo-router';
+import { useEffect } from "react";
+import { useNavigation } from 'expo-router';
 
 export default function App() {
+
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Home Page',
+      headerBackTitle: 'Back'
+    })
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to GoHere</Text>
