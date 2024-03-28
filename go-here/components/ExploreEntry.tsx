@@ -30,8 +30,9 @@ const ExploreEntry = ({
       </View>
       <View style={styles.container2}>
         {sponsorlvl > 0 &&
-          [...Array(sponsorlvl)].map(() => (
+          [...Array(sponsorlvl)].map((d, idx) => (
             <Entypo
+              key={idx}
               name="star"
               style={[styles.sponsorIcon, getSponsorColorStyle()]}
               size={25}

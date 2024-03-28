@@ -9,11 +9,11 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "expo-router";
+import { devLink } from "@/constants/DevLink";
 
 export default function FeedbackForm() {
-  const devLink = "https://eighty-zoos-enjoy.loca.lt";
-
-  const [feedback, setFeedback] = useState("");
+  const [feedbackTitle, setFeedbackTitle] = useState("");
+  const [feedbackDescription, setFeedbackDescription] = useState("");
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [errorMessageText, setErrorMessageText] = useState("");
 
@@ -30,11 +30,12 @@ export default function FeedbackForm() {
 
   async function submitFeedback() {
     try {
-      if (feedback == "") {
+      if (feedbackTitle == "" && feedbackDescription == "") {
         setErrorMessageText("Can't submit an empty form");
         setShowErrorMessage(true);
         return;
       }
+
       /* For dev testing:
        * Get this link by running "npx localtunnel --port 4000" in the /backend/ directory AFTER starting the MongoDB server.
        * This allows the expo app to access the server (it can't acces localhost).
@@ -43,7 +44,7 @@ export default function FeedbackForm() {
       await fetch(devLink + "/postFeedback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ feedback }),
+        body: JSON.stringify({ feedbackTitle: feedbackTitle, feedbackDescription: feedbackDescription }),
       }).then(async (response) => {
         if (!response.ok) {
           console.log("Feedback Form submission failed:", response.status);
@@ -53,8 +54,6 @@ export default function FeedbackForm() {
           setShowErrorMessage(true);
         } else {
           await response.json().then((data) => {
-            //do something
-
             setShowSuccessMessage(true);
           });
         }
@@ -73,12 +72,22 @@ export default function FeedbackForm() {
         <View style={styles.feedbackForm}>
           <Text style={styles.title}>GoHere Feedback Form</Text>
           <View style={styles.main}>
-            <Text style={styles.label}>Feedback</Text>
+            <Text style={styles.label}>Feedback Title</Text>
             <TextInput
               style={styles.input}
-              value={feedback}
-              onChangeText={(newValue) => setFeedback(newValue)}
-              placeholder="Enter feedback here"
+              value={feedbackTitle}
+              onChangeText={(newValue) => setFeedbackTitle(newValue)}
+              placeholder="Enter feedback title here"
+              placeholderTextColor={"grey"}
+              multiline={true}
+              numberOfLines={1}
+            />
+            <Text style={styles.label}>Feedback Description</Text>
+            <TextInput
+              style={styles.input}
+              value={feedbackDescription}
+              onChangeText={(newValue) => setFeedbackDescription(newValue)}
+              placeholder="Enter feedback description here"
               placeholderTextColor={"grey"}
               multiline={true}
               numberOfLines={1}

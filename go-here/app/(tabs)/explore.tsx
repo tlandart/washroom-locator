@@ -11,10 +11,9 @@ import ExploreEntry from "../../components/ExploreEntry";
 import NewWashroomButton from "@/components/NewWashroomButton";
 import { Ionicons } from "@expo/vector-icons";
 import ExploreInfo from "../../components/ExploreInfo";
+import { devLink } from "../../constants/DevLink"
 
 export default function TabOneScreen() {
-  const devLink = "https://few-spoons-beg.loca.lt";
-
   const [loading, setLoading] = useState(true);
   const [locations, setLocations] = useState<any[]>([]);
   const [selectedLocation, setSelectedLocation] = useState(-1);
@@ -69,11 +68,11 @@ export default function TabOneScreen() {
         alert("Fetch function failed: " + error);
       } finally {
         setLoading(false);
+        infoCloseHandler();
       }
     };
 
     getWashrooms();
-    infoCloseHandler();
   }, []);
 
   const mapRef = useRef<MapView>(null);
@@ -115,7 +114,7 @@ export default function TabOneScreen() {
           showsUserLocation={true}
           showsMyLocationButton={true}
         >
-          {locations.map(function (d, idx) {
+          {locations.map((d, idx) => {
             const sl = JSON.parse(JSON.stringify(d)).sponsorlvl;
             const path =
               sl <= 0
@@ -156,7 +155,7 @@ export default function TabOneScreen() {
           </View>
           <BottomSheetScrollView>
             {!loading &&
-              locations.map(function (d: any, idx: number) {
+              locations.map((d: any, idx: number) => {
                 return (
                   <TouchableOpacity
                     key={idx}

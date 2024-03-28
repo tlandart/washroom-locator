@@ -1,0 +1,1 @@
+export const devLink = "https://light-points-shave.loca.lt";
