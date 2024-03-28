@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Button, TextInput, StyleSheet, Text } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { devLink } from "@/constants/DevLink";
 
 interface FormData {
   title: string;
@@ -14,8 +14,6 @@ const CancelButton = ({ onCancel }: { onCancel: any }) => {
 };
 
 const NewWashroomButton = () => {
-  const devLink = "https://few-spoons-beg.loca.lt";
-
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     title: "",
@@ -32,13 +30,6 @@ const NewWashroomButton = () => {
   };
 
   const handleSubmit = async () => {
-    /* For dev testing:
-     * Get this link by running "npx localtunnel --port 4000" in the /backend/ directory AFTER starting the MongoDB server.
-     * This allows the expo app to access the server (it can't acces localhost).
-     * Ensure that the phone and computer are ON THE SAME NETWORK.
-     */
-    /* Had some trouble setting up server so for now this is commented out. */
-
     try {
       const response = await fetch(devLink + "/postWashroomRequest", {
         method: "POST",

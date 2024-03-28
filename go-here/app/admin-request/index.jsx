@@ -6,11 +6,13 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+<<<<<<< HEAD
 import { useNavigation } from "expo-router";
+=======
+import { devLink } from "@/constants/DevLink";
+>>>>>>> 6075519de87a52792ae5aead24e1a3206687cea4
 
 export default function TabAdminScreen() {
-  const devLink = "https://young-corners-battle.loca.lt";
-
   const [requests, setRequests] = useState([]);
   const navigation = useNavigation();
 
@@ -67,6 +69,7 @@ export default function TabAdminScreen() {
       <ScrollView>
         {requests.map((request) => (
           <View key={request._id} style={styles.requestItem}>
+            <Text>{request.requestType}</Text>
             <Text>{request.title}</Text>
             <Text>{request.address}</Text>
             <TouchableOpacity onPress={() => handleAccept(request._id)}>

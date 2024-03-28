@@ -1,0 +1,38 @@
+name: Node.js CI
+
+on:
+  push:
+      branches: ["main", "dev"]
+  pull_request: 
+      branches: ["main", "dev"]
+
+jobs:
+    build:
+      name: Backend test
+      runs-on: ubuntu-latest
+
+      defaults:
+        run:
+          working-directory: ./go-here/backend
+
+      strategy:
+        matrix:
+          node-version: [20.x]
+
+      steps:
+        - uses: actions/checkout@v3
+
+        - name: Use Node.js ${{ matrix.node-version }}
+          uses: actions/setup-node@v3
+          with:
+            node-version: ${{ matrix.node-version }}
+                  
+        - name: MongoDB in GitHub Actions
+          uses: supercharge/mongodb-github-action@v1.10.0
+          with:
+            mongodb-version: 7.0.5
+            mongodb-db: --dbpath=./data/db
+                  
+        - run: npm i
+        - run: npm start &
+        - run: npm test

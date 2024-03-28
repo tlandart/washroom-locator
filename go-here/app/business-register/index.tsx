@@ -7,9 +7,9 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "expo-router";
+import { devLink } from "@/constants/DevLink";
 
 export default function BusinessRegisterForm() {
-  const devLink = "https://stupid-nails-tap.loca.lt";
   const [title, setTitle] = useState("");
   const [address, setAddress] = useState("");
   const [latitude, setLatitude] = useState("");
@@ -20,6 +20,7 @@ export default function BusinessRegisterForm() {
   const [errorMessageText, setErrorMessageText] = useState("");
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const navigation = useNavigation();
+  const requestType = "BUSINESSREQUEST"
   
   useEffect(() => {
     navigation.setOptions({
@@ -43,7 +44,7 @@ export default function BusinessRegisterForm() {
       await fetch(devLink + "/postWashroomRequest", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, address, latitude, longitude, requestType: "BUSINESSREQUEST" }),
+        body: JSON.stringify({ title, address, latitude, longitude, requestType }),
       }).then(async (response) => {
         if (!response.ok) {
           console.log("Business Register Form submission failed:", response.status);
