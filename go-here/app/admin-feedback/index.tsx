@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { StyleSheet, Text, TextInput, Button, TouchableOpacity, Pressable } from 'react-native';
 import React, { useEffect } from 'react';
 import { View } from '@/components/Themed';
@@ -13,10 +14,13 @@ export default function AdminFeedback() {
     })
   }, []);
 =======
+=======
+>>>>>>> 637763fe69373ce663f464b3d3612d681f5db3a7
 import { StyleSheet, Text, TextInput, Button, TouchableOpacity, Pressable, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { View } from '@/components/Themed';
 import { devLink } from '@/constants/DevLink';
+import { useNavigation } from 'expo-router';
 
 export default function AdminFeedback() {
   type FeedbackType = {
@@ -25,9 +29,14 @@ export default function AdminFeedback() {
     feedbackDescription: "string";
   }
   const [feedback, setFeedback] = useState<FeedbackType[]>([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetchRequestedCollections();
+    navigation.setOptions({
+      title: 'Admin Feedback Page',
+      headerBackTitle: 'Back'
+    })
   }, []);
 
   const fetchRequestedCollections = async () => {
@@ -55,7 +64,10 @@ export default function AdminFeedback() {
       console.log("Fetch function failed:", error);
     }
   };
+<<<<<<< HEAD
 >>>>>>> 6075519de87a52792ae5aead24e1a3206687cea4
+=======
+>>>>>>> 637763fe69373ce663f464b3d3612d681f5db3a7
 
   return (
     <View style={styles.container}>
