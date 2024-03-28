@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Button, TextInput, StyleSheet, Text } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { devLink } from "@/constants/DevLink";
 
 interface FormData {
   title: string;
@@ -14,8 +14,6 @@ const CancelButton = ({ onCancel }: { onCancel: any }) => {
 };
 
 const NewWashroomButton = () => {
-  const devLink = "https://few-spoons-beg.loca.lt";
-
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     title: "",
