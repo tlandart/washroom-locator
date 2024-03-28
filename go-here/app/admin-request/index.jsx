@@ -6,16 +6,8 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-<<<<<<< HEAD
-<<<<<<< HEAD
-import { useNavigation } from "expo-router";
-=======
-import { devLink } from "@/constants/DevLink";
->>>>>>> 6075519de87a52792ae5aead24e1a3206687cea4
-=======
 import { useNavigation } from "expo-router";
 import { devLink } from "@/constants/DevLink";
->>>>>>> 637763fe69373ce663f464b3d3612d681f5db3a7
 
 export default function TabAdminScreen() {
   const [requests, setRequests] = useState([]);

@@ -7,19 +7,9 @@ import {
   Modal,
   TouchableOpacity,
 } from "react-native";
-<<<<<<< HEAD
-<<<<<<< HEAD
-import React, { useState, useEffect } from "react";
-import { useNavigation } from "expo-router";
-=======
-import React, { useState } from "react";
-import { devLink } from "@/constants/DevLink";
->>>>>>> 6075519de87a52792ae5aead24e1a3206687cea4
-=======
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "expo-router";
 import { devLink } from "@/constants/DevLink";
->>>>>>> 637763fe69373ce663f464b3d3612d681f5db3a7
 
 export default function FeedbackForm() {
   const [feedbackTitle, setFeedbackTitle] = useState("");

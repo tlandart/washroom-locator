@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, TextInput, View, StyleSheet } from "react-native";
 import { devLink } from "@/constants/DevLink";
+import { useNavigation } from 'expo-router';
+
 
 interface FormData {
   title: string;
@@ -8,6 +10,15 @@ interface FormData {
 }
 
 const AdminNews = () => {
+
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Admin News Page',
+      headerBackTitle: 'Back'
+    })
+  }, []);
+  
   const [formData, setFormData] = useState<FormData>({
     title: "",
     description: "",
