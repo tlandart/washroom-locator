@@ -36,7 +36,8 @@ const COLLECTIONS = {
     users: "users",
     feedback: "feedback",
     requested: "requested",
-    sponsors: "sponsors"
+    sponsors: "sponsors",
+    news: "news",
   };
 
   app.get("/getAllSponsors", express.json(), async (req, res) => {
@@ -446,4 +447,43 @@ app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) =>
   } catch (error) {
     res.status(500).json({error: error.message})
   } 
+});
+
+app.post("/postNews", express.json(), async (req, res) => {
+  try {
+    const { title, description } = req.body;
+
+    if (!title || !description) {
+      return res
+        .status(400)
+        .json({ error: "Title and Description are required." });
+    }
+
+    const today = new Date();
+    const collection = db.collection(COLLECTIONS.news);
+    const result = await collection.insertOne({
+      title,
+      day: today.getDate(),
+      month: today.getMonth() + 1,
+      year: today.getFullYear(),
+      description,
+    });
+    res.json({
+      response: "News entry added succesfully.",
+      insertedId: result.insertedId,
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/getAllNews", express.json(), async (req, res) => {
+  try {
+      const collection = db.collection(COLLECTIONS.news);
+      const data = await collection.find().toArray();
+      res.json({ response: data });
+    } catch (error) {
+      res.status(500).json({error: error.message})
+    }
 });

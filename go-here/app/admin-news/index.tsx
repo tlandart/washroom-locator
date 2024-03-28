@@ -4,20 +4,14 @@ import { Button, TextInput, View, StyleSheet } from "react-native";
 interface FormData {
   title: string;
   description: string;
-  day: number;
-  month: number;
-  year: number;
 }
 
 const AdminNews = () => {
-  const devLink = "https://few-spoons-beg.loca.lt";
+  const devLink = "https://forty-mugs-trade.loca.lt";
 
   const [formData, setFormData] = useState<FormData>({
     title: "",
     description: "",
-    day: 1,
-    month: 1,
-    year: 1970,
   });
 
   const handleInputChange = (name: keyof FormData, value: string) => {
@@ -28,12 +22,9 @@ const AdminNews = () => {
   };
 
   const handleSubmit = async () => {
-    const today = new Date();
     setFormData({
-      ...formData,
-      day: today.getDate(),
-      month: today.getMonth(),
-      year: today.getFullYear(),
+      title: formData.title,
+      description: formData.description,
     });
     try {
       const response = await fetch(devLink + "/postNews", {
@@ -56,9 +47,6 @@ const AdminNews = () => {
       setFormData({
         title: "",
         description: "",
-        day: 1,
-        month: 1,
-        year: 1970,
       });
     } catch (error) {
       alert("Error submitting form: " + error);
@@ -67,9 +55,6 @@ const AdminNews = () => {
     setFormData({
       title: "",
       description: "",
-      day: 1,
-      month: 1,
-      year: 1970,
     });
   };
 
@@ -77,9 +62,6 @@ const AdminNews = () => {
     setFormData({
       title: "",
       description: "",
-      day: 1,
-      month: 1,
-      year: 1970,
     });
   };
 

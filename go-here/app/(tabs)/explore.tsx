@@ -69,11 +69,11 @@ export default function TabOneScreen() {
         alert("Fetch function failed: " + error);
       } finally {
         setLoading(false);
+        infoCloseHandler();
       }
     };
 
     getWashrooms();
-    infoCloseHandler();
   }, []);
 
   const mapRef = useRef<MapView>(null);

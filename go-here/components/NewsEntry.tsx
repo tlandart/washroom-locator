@@ -1,7 +1,8 @@
 import { StyleSheet } from "react-native";
 import { Text, View } from "@/components/Themed";
 
-const MAX_LENGTH = 125;
+const MAX_TITLE_LENGTH = 30;
+const MAX_DESC_LENGTH = 125;
 
 const ExploreEntry = ({
   entry
@@ -10,11 +11,11 @@ const ExploreEntry = ({
     <View style={styles.container}>
       <View style={styles.container2}>
         <View style={styles.container3}>
-          <Text style={styles.title}>{entry.title}</Text>
+          <Text style={styles.title}>{entry.title.length > MAX_TITLE_LENGTH ? entry.title.substring(0, MAX_TITLE_LENGTH) + "..." : entry.title}</Text>
           <Text style={styles.subtitle}>{`${entry.month}/${entry.day}/${entry.year}`}</Text>
         </View>
         <View style={styles.separator} />
-        <Text style={styles.description}>{entry.description.length > MAX_LENGTH ? entry.description.substring(0, MAX_LENGTH) + "..." : entry.description}</Text>
+        <Text style={styles.description}>{entry.description.length > MAX_DESC_LENGTH ? entry.description.substring(0, MAX_DESC_LENGTH) + "..." : entry.description}</Text>
       </View>
     </View>
   );
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   title: {
-    fontSize: 20,
+    fontSize: 19,
     color: "black",
   },
   subtitle: {

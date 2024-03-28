@@ -6,12 +6,27 @@ import { GestureHandlerRootView, TouchableOpacity } from 'react-native-gesture-h
 import { Ionicons } from '@expo/vector-icons';
 
 export default function TabNewsScreen() {
+  const devLink = "https://forty-mugs-trade.loca.lt";
   const [entries, setEntries] = useState<any[]>([]);
 
   useEffect(() => {
-    setEntries([
-      {title: "Entry 17", day: 3, month: 1, year: 2020, description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultrices arcu quis commodo dapibus. Morbi egestas quam nec dui egestas, vel vehicula ex lobortis. Sed eget lacinia justo, eu interdum neque. In vitae mauris vitae sapien sollicitudin scelerisque a vel quam. Curabitur purus felis, ullamcorper nec molestie at, tincidunt at odio. Aenean bibendum, magna sit amet pharetra suscipit, est risus tempus ante, ut bibendum felis elit quis est. Donec euismod dolor massa, vel consectetur odio lacinia vitae. Donec dapibus massa odio, quis scelerisque turpis rutrum quis. Aenean sed urna molestie, blandit magna non, accumsan ligula. Praesent lobortis in dolor a auctor. Maecenas non mauris nulla.  Praesent sodales nibh quis urna egestas suscipit. Aenean molestie tincidunt commodo. Praesent diam elit, tempus ac est et, congue auctor risus. Vivamus porta metus eu mauris fringilla iaculis. Fusce augue arcu, cursus ac nunc at, hendrerit pellentesquet pharetra suscipit, est risus tempus ante, ut bibendum felis elit quis est. Donec euismod dolor massa, vel consectetur odio lacinia vitae. Donec dapibus massa odio, quis scelerisque turpis rutrum quis. Aenean sed urna molestie, blandit magna non, accumsan ligula. Praesent lobortis in dolor a auctor. Maecenas non mau\n\nris nulla.  Praesent sodales nibh quis urna egestas suscipit. Aenean molestie tincidunt commodo. Praesent diam elit, tempus ac est et, congue auctor risus. Vivamus porta metus eu mauris fringilla iaculis. Fusce augue arcu, cursus ac nunc at, hendrerit pellentesquet pharetra suscipit, est risus tempus ante, ut bibendum felis elit quis est. Donec euismod dolor massa, vel consectetur odio lacinia vitae. Donec dapibus massa odio, quis scelerisque turpis rutrum quis. Aenean sed urna molestie, blandit magna non, accumsan ligula. Praesent lobortis in dolor a auctor. Maecenas non mauris nulla.  Praesent sodales nibh quis urna egestas suscipit. Aenean molestie tincidunt commodo. Praesent diam elit, tempus ac est et, congue auctor risus. Vivamus porta metus eu mauris fringill\n\na iaculis. Fusce augue arcu, cursus ac nunc at, hendrerit pellentesque purus. Etiam lacus orci, malesuada id placerat at, lacinia sed erat. Donec faucibus est eu sem rutrum finibus. Sed tincidunt leo a nunc ultricies gravida. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Ut ornare finibus augue mattis lacinia. Nullam eu nisl id odio fermentum dapibus sed eu eros. Nunc laoreet ullamcorper enim eget consectetur. Suspendisse pretium eleifend neque, ac condimentum velit condimentum et."},
-      {title: "Entry 5", day: 30, month: 11, year: 2023, description: "risus tempus ante, ut bibendum felis elit quis est. Donec euismod dolor massa, vel consectetur odio lacinia vitae. Donec dapibus massa odio, quis scelerisque turpis rutrum quis. Aenean sed urna molestie, \n\nblandit magna non, accumsan ligula. Praesent lobortis in dolor a auctor. Maecenas non mauris nulla.  Praesent sodales nibh quis urna egestas suscipit. Aenean molestie tincidunt commodo. Praesent diam elit, tempus ac est et, congue auctor risus. Vivamus porta metus eu mauris fringilla iaculis. Fusce augue arcu, cursus ac nunc at, hendrerit pellentesque purus. Etiam lacus orci, malesuada id placerat at, lacinia sed erat. Donec faucibus est eu sem rutrum finibus. Sed tincidunt leo a nunc ultricies gravida. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere"}]);
+    const getEntries = async () => {
+      try {
+        await fetch(devLink + "/getAllNews").then(async (response) => {
+          if (!response.ok) {
+            alert("Server failed: " + response.status);
+          } else {
+            await response.json().then((data) => {
+              setEntries(data.response);
+            });
+          }
+        });
+      } catch (error) {
+        alert("Fetch function failed: " + error);
+      }
+    };
+
+    getEntries();
   }, []);
   
   const [selectedEntry, setSelectedEntry] = useState(-1);
@@ -44,7 +59,7 @@ export default function TabNewsScreen() {
         <GestureHandlerRootView>
           {entries.map((d: any, idx: number) => {
             return (
-              <TouchableOpacity onPress={() => setSelectedEntry(idx)}>
+              <TouchableOpacity key={idx} onPress={() => setSelectedEntry(idx)}>
                 <NewsEntry entry={d}/>
               </TouchableOpacity>
             );
