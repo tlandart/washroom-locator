@@ -31,23 +31,25 @@ export default function SettingsScreen() {
       {showLogin ? (
         <>
           <TextInput
+            style={styles.button}
             value={username}
             onChangeText={setUsername}
             placeholder="Enter username"
             autoCapitalize="none" // to ensure username is case-insensitive
           />
           <TextInput
+            style={styles.button}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
             placeholder="Enter password"
           />
-          <TouchableOpacity style={{marginTop: 10}} onPress={handleLogin}>
+          <TouchableOpacity style={[styles.button, {marginTop: 10}]} onPress={handleLogin}>
             <Text>Admin Login</Text>
           </TouchableOpacity>
         </>
       ) : (
-        <TouchableOpacity style={{marginTop: 10}} onPress={() => setShowLogin(true)}>
+        <TouchableOpacity style={[styles.button, {marginTop: 10}]} onPress={() => setShowLogin(true)}>
           <Text>Admin Login</Text>
         </TouchableOpacity>
       )}
