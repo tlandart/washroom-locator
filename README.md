@@ -21,7 +21,7 @@ Run the backend:
 - npm run start
 
 Set up localtunnel to communicate between 2 seperate devices (i.e. phone and laptop)
-- in any directorty of the project, such as the root, run
+- in any directory of the project, such as the root, run
 - npx localtunnel --port 4000
 - take the link provided and replace it with the existing value of variable devLink in DevLink.ts, located in the constants directory
     - this is the link that the frontend ran on a mobile device will use to contact the backend ran on a computer
