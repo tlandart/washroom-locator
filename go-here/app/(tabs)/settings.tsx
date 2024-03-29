@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { View } from '@/components/Themed';
 import { Link } from "expo-router";
 import { useNavigation } from '@react-navigation/native';
+import Colors from '@/constants/Colors';
 
 export default function SettingsScreen() {
   const [username, setUsername] = useState('');
@@ -76,6 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 30,
+    color: Colors['light'].tint,
   },
   separator: {
     marginVertical: 30,

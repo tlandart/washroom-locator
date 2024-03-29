@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { Text, View } from "@/components/Themed";
+import Colors from "@/constants/Colors";
 
 const MAX_TITLE_LENGTH = 30;
 const MAX_DESC_LENGTH = 125;
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 19,
-    color: "black",
+    color: Colors['light'].tint,
   },
   subtitle: {
     fontSize: 17,

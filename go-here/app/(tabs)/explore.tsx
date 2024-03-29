@@ -12,6 +12,7 @@ import NewWashroomButton from "@/components/NewWashroomButton";
 import { Ionicons } from "@expo/vector-icons";
 import ExploreInfo from "../../components/ExploreInfo";
 import { devLink } from "../../constants/DevLink"
+import Colors from "@/constants/Colors";
 
 export default function TabOneScreen() {
   const [loading, setLoading] = useState(true);
@@ -261,7 +262,7 @@ const styles = StyleSheet.create({
     padding: 15,
     fontSize: 17,
     fontWeight: "500",
-    color: "#e61e25",
+    color: Colors['light'].tint,
   },
   infoSheetHandleCloseIcon: {
     position: "absolute",

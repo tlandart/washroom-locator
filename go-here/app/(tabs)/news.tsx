@@ -5,6 +5,7 @@ import NewsEntry from '../../components/NewsEntry';
 import { GestureHandlerRootView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 import { devLink } from "../../constants/DevLink"
+import Colors from '@/constants/Colors';
 
 export default function TabNewsScreen() {
   const [loading, setLoading] = useState(true);
@@ -91,6 +92,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: "bold",
+    color: Colors['light'].tint,
   },
   subtitle: {
     fontSize: 17,
