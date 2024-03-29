@@ -6,6 +6,7 @@ import { Entypo } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import { MaterialIcons } from '@expo/vector-icons';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -38,7 +39,7 @@ export default function TabLayout() {
         name="info"
         options={{
           title: 'Info',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <Entypo name="info" size={24} color="black" />,
         }}
       />
       <Tabs.Screen
@@ -52,7 +53,7 @@ export default function TabLayout() {
         name="settings"
         options={{
           title: 'Settings',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <MaterialIcons name="settings-applications" size={24} color="black" />
         }}
       />
     </Tabs>
