@@ -258,11 +258,11 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.1)",
   },
   bottomSheetTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors['light'].tint,
     width: "100%",
     padding: 15,
-    fontSize: 17,
-    fontWeight: "500",
-    color: Colors['light'].tint,
   },
   infoSheetHandleCloseIcon: {
     position: "absolute",
