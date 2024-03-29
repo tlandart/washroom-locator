@@ -11,7 +11,6 @@ Set up and run database: (equivalent to how it is done in the labs)
 - cd data
 - mkdir db
 - cd ..
-- cd ..
 - "C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe" --dbpath=.\data\db
     - or your equivalent version of the above
  
