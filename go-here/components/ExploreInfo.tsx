@@ -8,6 +8,8 @@ const ExploreEntry = ({
   latitude,
   longitude,
   sponsorlvl,
+  phone,
+  email,
 }: any) => {
   const getSponsorColorStyle = () => {
     const sl = sponsorlvl;
@@ -40,9 +42,8 @@ const ExploreEntry = ({
       <View style={{ padding: 15 }}>
         <Text style={styles.titleText}>{title}</Text>
         <Text style={styles.text}>{address}</Text>
-        <Text style={styles.text}>
-          {longitude}, {latitude}
-        </Text>
+        {phone ? <Text style={styles.text}>Phone number: {phone}</Text> : <Text/>}
+        {email ? <Text style={styles.text}>Email: {email}</Text> : <Text/>}
       </View>
     </View>
   );

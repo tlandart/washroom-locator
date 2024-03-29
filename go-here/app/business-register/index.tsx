@@ -40,7 +40,7 @@ export default function BusinessRegisterForm() {
       await fetch(devLink + "/postWashroomRequest", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, address, latitude, longitude, requestType }),
+        body: JSON.stringify({ title, address, latitude, longitude, requestType, phone, email }),
       }).then(async (response) => {
         if (!response.ok) {
           console.log("Business Register Form submission failed:", response.status);

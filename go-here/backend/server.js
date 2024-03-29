@@ -165,7 +165,7 @@ app.get("/getWashroom/:washroomId", express.json(), async (req, res) => {
 
 app.post("/postWashroom", express.json(), async (req, res) => {
   try {
-    const { title, address, longitude, latitude, sponsorlvl } = req.body;
+    const { title, address, longitude, latitude, sponsorlvl} = req.body;
 
     if (!title || !address || !longitude || !latitude || sponsorlvl == null) {
       return res
@@ -184,7 +184,7 @@ app.post("/postWashroom", express.json(), async (req, res) => {
       address,
       longitude,
       latitude,
-      sponsorlvl
+      sponsorlvl,
     });
     res.json({
       response: "Washroom added succesfully.",
@@ -223,7 +223,7 @@ app.patch("/patchWashroom/:washroomId", express.json(), async (req, res) => {
         ...(address && {address}),
         ...(longitude && {longitude}),
         ...(latitude && {latitude}),
-        ...(sponsorlvl && {sponsorlvl})
+        ...(sponsorlvl && {sponsorlvl}),
       }
     });
 
@@ -381,7 +381,7 @@ app.get("/getAllRequested", express.json(), async (req, res) => {
 
 app.post("/postWashroomRequest", express.json(), async (req, res) => {
   try {
-    const { title, address, longitude, latitude, requestType } = req.body;
+    const { title, address, longitude, latitude, requestType, phone: phone, email: email } = req.body;
 
     if (!title || !address || !longitude || !latitude || !requestType) {
       return res
@@ -395,13 +395,20 @@ app.post("/postWashroomRequest", express.json(), async (req, res) => {
         .json({ error: "Invalid request type. It must be USERREQUEST, USERCLOSURE, or BUSINESSREQUEST." });
     }
 
+
     const collection = db.collection(COLLECTIONS.requested);
     const result = await collection.insertOne({
       title,
       address,
       longitude,
       latitude,
-      requestType: requestType.toUpperCase()
+      /*
+      ...(phone && { phone }), 
+      ...(email && { email }),
+      */
+      ...(phone ? { phone } : {}),
+      ...(email ? { email } : {}),
+      requestType: requestType.toUpperCase(),
     });
     res.json({
       response: "Washroom request added succesfully.",
@@ -439,12 +446,38 @@ app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) =>
 
       if (washroomData.requestType === "USERCLOSURE") {
         const deletedWashroom = await washroomCollection.deleteOne({ _id: new ObjectId(washroomId) })
-      } else {
+      } else if (washroomData.requestType == "USERREQUEST"){
         const newWashroomData = await washroomCollection.insertOne({
           title: washroomData.title,
           address: washroomData.address,
           longitude: washroomData.longitude,
           latitude: washroomData.latitude,
+          sponsorlvl: 0,
+          requestType: washroomData.requestType
+        });
+        res.json({
+          response: "Washroom added succesfully.",
+          insertedId: newWashroomData.insertedId,
+        }); 
+        const requestData = await requestCollection.deleteOne({
+          _id: new ObjectId(washroomId),
+        });
+  
+        if (newWashroomData.matchedCount === 0 || washroomData.matchedCount === 0) {
+          return res
+            .status(404)
+            .json({ error: "Unable to find accepted washroom with given ID." });
+        } 
+        
+        return res
+      } else if (washroomData.requestType === "BUSINESSREQUEST"){
+        const newWashroomData = await washroomCollection.insertOne({
+          title: washroomData.title,
+          address: washroomData.address,
+          longitude: washroomData.longitude,
+          latitude: washroomData.latitude,
+          phone: washroomData.phone,
+          email: washroomData.email,
           sponsorlvl: 0,
           requestType: washroomData.requestType
         });

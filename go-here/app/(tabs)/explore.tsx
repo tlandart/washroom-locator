@@ -162,6 +162,8 @@ export default function TabOneScreen() {
                       latitude={JSON.parse(JSON.stringify(d)).latitude}
                       longitude={JSON.parse(JSON.stringify(d)).longitude}
                       sponsorlvl={JSON.parse(JSON.stringify(d)).sponsorlvl}
+                      phone={JSON.parse(JSON.stringify(d)).phone}
+                      email={JSON.parse(JSON.stringify(d)).email}
                     />
                   </TouchableOpacity>
                 );
@@ -193,6 +195,8 @@ export default function TabOneScreen() {
                 latitude={locations.at(selectedLocation).latitude}
                 longitude={locations.at(selectedLocation).longitude}
                 sponsorlvl={locations.at(selectedLocation).sponsorlvl}
+                phone={locations.at(selectedLocation).phone}
+                email={locations.at(selectedLocation).email}
               />
             </BottomSheetScrollView>
           ) : (
