@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginTop: 30,
+    marginTop: 50,
     color: Colors['light'].tint,
   },
   separator: {
