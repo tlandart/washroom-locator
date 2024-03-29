@@ -25,43 +25,7 @@ export default function SettingsScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>MY PROFILE</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <TouchableOpacity style={styles.button}>
-        <Link href="/my-profile/">My Profile</Link>
-      </TouchableOpacity>
-
-      <Text style={styles.title}>APP SETTINGS</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <TouchableOpacity style={styles.button}>
-        <Text>Location Permission</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
-        <Text>Analytics</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.title}>PRIVACY AND TERMS</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <TouchableOpacity style={styles.button}>
-        <Text>Privacy Policy</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.title}>SUPPORT</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <TouchableOpacity style={styles.button}>
-        <Text>Request Support</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
-        <Text>Version</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.title}>FEEDBACK</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <TouchableOpacity style={styles.button}>
-        <Link href="/feedback-form/">Provide Feedback</Link>
-      </TouchableOpacity> 
-
-      <Text style={styles.title}>Admin</Text>
+      <Text style={styles.title}>ADMIN LOGIN</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       {showLogin ? (
         <>
@@ -82,6 +46,18 @@ export default function SettingsScreen() {
       ) : (
         <Button title="Admin Login" onPress={() => setShowLogin(true)} />
       )}
+
+      <Text style={styles.title}>MY PROFILE</Text>
+      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <TouchableOpacity style={styles.button}>
+        <Link href="/my-profile/">My Profile</Link>
+      </TouchableOpacity>
+
+      <Text style={styles.title}>FEEDBACK</Text>
+      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <TouchableOpacity style={styles.button}>
+        <Link href="/feedback-form/">Provide Feedback</Link>
+      </TouchableOpacity> 
     </View>
   );
 }
