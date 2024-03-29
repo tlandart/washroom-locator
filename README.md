@@ -1,5 +1,5 @@
 # c01w24-project-team-apple
-Our updated project code is in dev. main is not updated.
+Our updated project code is in dev. main is not updated with the code, it is only updated with the deliverables.
 
 # Instructions to run our project:
 We have a setup similar to the labs, using Expo Go to run our app on a mobile device.
