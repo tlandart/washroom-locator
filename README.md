@@ -3,7 +3,7 @@ Our updated project code is in dev. main is not updated.
 
 # Instructions to run our project:
 We have a setup similar to the labs, using Expo Go to run our app on a mobile device.
-Note: The phone and laptop/computer must be on the same network.
+Note: The phone/mobile device and laptop/computer must be on the same network.
 
 Set up and run database: (equivalent to how it is done in the labs)
 - in the backend directory, run
