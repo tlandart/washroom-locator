@@ -38,7 +38,7 @@ export default function TabLayout() {
         name="info"
         options={{
           title: 'Info',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <Entypo name="info" size={24} color="black" />,
         }}
       />
       <Tabs.Screen
