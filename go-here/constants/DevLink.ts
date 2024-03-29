@@ -1,4 +1,4 @@
-export const devLink = "https://tiny-mice-stay.loca.lt";
+export const devLink = "https://new-toes-glow.loca.lt";
 
 /* For dev testing:
 * Get this link by running "npx localtunnel --port 4000".

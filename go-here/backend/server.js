@@ -445,7 +445,12 @@ app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) =>
       }
 
       if (washroomData.requestType === "USERCLOSURE") {
-        const deletedWashroom = await washroomCollection.deleteOne({ _id: new ObjectId(washroomId) })
+        await washroomCollection.deleteOne({ longitude: washroomData.longitude, latitude: washroomData.latitude });
+        await requestCollection.deleteOne({ _id: washroomData._id });
+        res.json({
+          response: `Washroom with longitude ${washroomData.longitude} and latitude ${washroomData.latitude} deleted succesfully.`,
+        }); 
+        return res;
       } else if (washroomData.requestType == "USERREQUEST"){
         const newWashroomData = await washroomCollection.insertOne({
           title: washroomData.title,
@@ -508,7 +513,7 @@ app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) =>
       } 
     }
 
-    res.json({ response: `Document with ID ${washroomId} patched.` });
+    res.json({ response: `No changes were made.` });
   } catch (error) {
     res.status(500).json({error: error.message})
   } 
