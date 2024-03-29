@@ -1,6 +1,9 @@
-import { StyleSheet } from "react-native";
+import { Button, StyleSheet } from "react-native";
 import { Text, View } from "@/components/Themed";
 import { Entypo } from "@expo/vector-icons";
+import { devLink } from "@/constants/DevLink";
+import { useState } from "react";
+
 
 const ExploreEntry = ({
   title,
@@ -11,6 +14,8 @@ const ExploreEntry = ({
   phone,
   email,
 }: any) => {
+  const [isSelected, setIsSelected] = useState(false);
+  
   const getSponsorColorStyle = () => {
     const sl = sponsorlvl;
     return {
@@ -32,6 +37,26 @@ const ExploreEntry = ({
     return `This business supports GoHere®\nas a ${lvl} level sponsor!`;
   };
 
+  const handleWashroomClosure = async () =>  {
+    const requestType = "USERCLOSURE"
+    try {
+      await fetch(devLink + "/postWashroomRequest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, address, latitude, longitude, requestType}),
+      }).then(async (response) => {
+        if (!response.ok) {
+          console.log("User closure submission failed:", response.status);
+        } else {
+          console.log("User Closure submission success:");
+        }
+      })
+    } catch (error) {
+      console.log("Fetch function failed:", error);
+    }
+    setIsSelected(!isSelected)
+  }
+
   return (
     <View style={styles.container}>
       {sponsorlvl > 0 && (
@@ -44,6 +69,7 @@ const ExploreEntry = ({
         <Text style={styles.text}>{address}</Text>
         {phone ? <Text style={styles.text}>Phone number: {phone}</Text> : <Text/>}
         {email ? <Text style={styles.text}>Email: {email}</Text> : <Text/>}
+        {isSelected && <Button title="Report Washroom Closure" onPress={handleWashroomClosure}></Button>}
       </View>
     </View>
   );
