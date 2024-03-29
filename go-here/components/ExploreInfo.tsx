@@ -69,8 +69,11 @@ const ExploreEntry = ({
         <Text style={styles.text}>{address}</Text>
         {phone ? <Text style={styles.text}>Phone number: {phone}</Text> : <Text/>}
         {email ? <Text style={styles.text}>Email: {email}</Text> : <Text/>}
-        {!isSelected && <Button title="Report Washroom Closure" onPress={handleWashroomClosure}></Button>}
       </View>
+      {!isSelected && 
+      <View style={{backgroundColor: "#eee", width: "100%", paddingVertical: 15,}}>
+        <Button title="Report Washroom Closure" onPress={handleWashroomClosure}></Button>
+      </View>}
     </View>
   );
 };

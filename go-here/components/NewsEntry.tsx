@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 19,
+    fontWeight: "500",
     color: Colors['light'].tint,
   },
   subtitle: {

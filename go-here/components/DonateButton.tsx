@@ -1,4 +1,7 @@
-import { View, Button, Linking, StyleSheet} from 'react-native';
+import { StyleSheet} from 'react-native';
+import { Entypo } from '@expo/vector-icons';
+import { Text, Linking, Pressable} from 'react-native';
+import { NativeViewGestureHandler, TouchableOpacity } from 'react-native-gesture-handler';
 
 const DonateButton = () => {
   const handleDonatePress = async () => {
@@ -9,10 +12,24 @@ const DonateButton = () => {
   };
 
   return (
-    <View style={{ margin: 10 }}>
-      <Button title="Donate Now" onPress={handleDonatePress} />
-    </View>
+    <TouchableOpacity style={styles.container} onPress={handleDonatePress}>
+      <Text style={styles.text}>Donate Now </Text>
+      <Entypo style={[styles.text, {marginTop: 2}]} color="grey" name="chevron-right"/>
+    </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: "white",
+    flexDirection: "row",
+    marginTop: 10,
+  },
+  text: {
+    fontSize: 18,
+  },
+});
 
 export default DonateButton;

@@ -42,10 +42,14 @@ export default function SettingsScreen() {
             secureTextEntry
             placeholder="Enter password"
           />
-          <Button title="Submit" onPress={handleLogin} />
+          <TouchableOpacity style={{marginTop: 10}} onPress={handleLogin}>
+            <Text>Admin Login</Text>
+          </TouchableOpacity>
         </>
       ) : (
-        <Button title="Admin Login" onPress={() => setShowLogin(true)} />
+        <TouchableOpacity style={{marginTop: 10}} onPress={() => setShowLogin(true)}>
+          <Text>Admin Login</Text>
+        </TouchableOpacity>
       )}
 
       <Text style={styles.title}>MY PROFILE</Text>
