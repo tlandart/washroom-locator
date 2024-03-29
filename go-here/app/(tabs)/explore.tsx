@@ -64,7 +64,6 @@ export default function TabOneScreen() {
         alert("Fetch function failed: " + error);
       } finally {
         setLoading(false);
-        infoCloseHandler();
       }
     };
 
@@ -109,6 +108,7 @@ export default function TabOneScreen() {
           ref={mapRef}
           showsUserLocation={true}
           showsMyLocationButton={true}
+          onMapLoaded={infoCloseHandler}
         >
           {locations.map((d, idx) => {
             const sl = JSON.parse(JSON.stringify(d)).sponsorlvl;
@@ -201,7 +201,7 @@ export default function TabOneScreen() {
               />
             </BottomSheetScrollView>
           ) : (
-            <Text>ERROR</Text>
+            <Text style={{textAlign: "center"}}>Loading database...</Text>
           )}
         </BottomSheet>
       </View>

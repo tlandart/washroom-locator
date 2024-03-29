@@ -12,10 +12,14 @@ export default function App() {
     })
   }, []);
 
+  const leave = () => {
+    navigation.navigate('explore');
+  }
+
   return (
-    <View style={styles.container}>
+    <View style={styles.container} visible={false}>
       <Text style={styles.title}>Welcome to GoHere</Text>
-      <Image source={require("../assets/images/GoHere.jpg")} style={styles.image}></Image>
+      <Image source={require("../assets/images/GoHere.jpg")} style={styles.image} onLoad={leave}></Image>
     </View>
   );
 }
@@ -24,7 +28,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   title: {
     fontSize: 20,
