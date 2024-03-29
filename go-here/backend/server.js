@@ -452,8 +452,6 @@ app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) =>
           address: washroomData.address,
           longitude: washroomData.longitude,
           latitude: washroomData.latitude,
-          phone: washroomData.phone,
-          email: washroomData.email,
           sponsorlvl: 0,
           requestType: washroomData.requestType
         });
@@ -472,9 +470,7 @@ app.patch("/patchRequestStatus/:washroomId", express.json(), async (req, res) =>
         } 
         
         return res
-      }
-
-      else if (washroomData.requestType === "BUSINESSCLOSURE"){
+      } else if (washroomData.requestType === "BUSINESSREQUEST"){
         const newWashroomData = await washroomCollection.insertOne({
           title: washroomData.title,
           address: washroomData.address,
